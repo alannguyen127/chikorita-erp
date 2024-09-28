@@ -66,19 +66,20 @@ function MainHeader() {
 
       <MenuItem
         onClick={handleMenuClose}
-        to="/"
-        component={RouterLink}
-        sx={{ mx: 1 }}
-      >
-        My profile
-      </MenuItem>
-      <MenuItem
-        onClick={handleMenuClose}
         to="/account"
         component={RouterLink}
         sx={{ mx: 1 }}
       >
         Account Settings
+      </MenuItem>
+
+      <MenuItem
+        onClick={handleMenuClose}
+        to="/register"
+        component={RouterLink}
+        sx={{ mx: 1 }}
+      >
+        Create Account
       </MenuItem>
 
       <Divider sx={{ borderStyle: "dashed" }} />

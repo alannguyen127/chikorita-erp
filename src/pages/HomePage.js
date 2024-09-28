@@ -7,28 +7,14 @@ import PersonAddRoundedIcon from "@mui/icons-material/PersonAddRounded";
 import Sidebar from "../components/Sidebar";
 
 function HomePage() {
-  const { user } = useAuth;
-  const [currentTab, setCurrentTab] = useState("profile");
+  // const { user } = useAuth;
+  // const [currentTab, setCurrentTab] = useState("profile");
 
-  const handleChangeTab = (newValue) => {
-    setCurrentTab(newValue);
-  };
+  // const handleChangeTab = (newValue) => {
+  //   setCurrentTab(newValue);
+  // };
 
-  // const PROFILE_TABS = [
-  //   { value: "profile", icon: <AccountBoxIcon sx={{ fontSize: 24 }} /> },
-  //   { value: "friends", icon: <PeopleAltIcon sx={{ fontSize: 24 }} /> },
-  //   { value: "requests", icon: <ContactMailIcon sx={{ fontSize: 24 }} /> },
-  //   {
-  //     value: "add_friend",
-  //     icon: <PersonAddRoundedIcon sx={{ fontSize: 24 }} />,
-  //   },
-  // ];
-
-  return (
-    <div>
-      <h1>Hello</h1>
-    </div>
-  );
+  return <div>Hello</div>;
 }
 
 export default HomePage;

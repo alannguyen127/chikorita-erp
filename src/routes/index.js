@@ -3,12 +3,17 @@ import { Route, Routes } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import HomePage from "../pages/HomePage";
 import AccountPage from "../pages/AccountPage";
-import UserProfilePage from "../pages/UserProfilePage";
 import BlankLayout from "../layouts/BlankLayout";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import NotFoundPage from "../pages/NotFoundPage";
+import CustomerPage from "../pages/CustomerPage";
+import OrderPage from "../pages/OrderPage";
+import MealPackagePage from "../pages/MealPackagePage";
+import OrderDetailPage from "../pages/OrderDetailPage";
+import CustomerDetailPage from "../pages/CustomerDetailPage";
 import AuthRequire from "./AuthRequire";
+import MealPkgDetailPage from "../pages/MealPkgDetailPage";
 
 function Router() {
   return (
@@ -22,8 +27,18 @@ function Router() {
         }
       >
         <Route index element={<HomePage />} />
+        <Route path="customer" element={<CustomerPage />} />
+        <Route path="order" element={<OrderPage />} />
+        <Route path="meal_package" element={<MealPackagePage />} />
         <Route path="account" element={<AccountPage />} />
-        <Route path="user/:userId" element={<UserProfilePage />} />
+        {/* <Route path="report" element={<AccountPage />} /> */}
+
+        <Route path="customer/:customerId" element={<CustomerDetailPage />} />
+        <Route path="order/:orderID" element={<OrderDetailPage />} />
+        <Route
+          path="meal_package/:meal_packageID"
+          element={<MealPkgDetailPage />}
+        />
       </Route>
       <Route element={<BlankLayout />}>
         <Route path="/login" element={<LoginPage />} />
