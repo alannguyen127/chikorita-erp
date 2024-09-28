@@ -23,7 +23,7 @@ function CustomerPage() {
       <ItemList
         items={customers}
         addItem={addCustomer}
-        listName={"Customer"}
+        listName={"Customers:"}
         buttonName={"Add Customer"}
       />
     </Box>

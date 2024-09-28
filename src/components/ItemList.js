@@ -19,7 +19,7 @@ const ItemList = ({ items, addItem, listName, buttonName }) => {
       <List>
         {items.map((item) => (
           <ListItem key={item.id}>
-            <ListItemText primary={item.name} secondary={item.email} />
+            <ListItemText primary={item.name} />
           </ListItem>
         ))}
       </List>
