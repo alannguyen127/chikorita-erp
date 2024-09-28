@@ -4,6 +4,7 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 import PersonAddRoundedIcon from "@mui/icons-material/PersonAddRounded";
+import Sidebar from "../components/Sidebar";
 
 function HomePage() {
   const { user } = useAuth;
@@ -13,19 +14,19 @@ function HomePage() {
     setCurrentTab(newValue);
   };
 
-  const PROFILE_TABS = [
-    { value: "profile", icon: <AccountBoxIcon sx={{ fontSize: 24 }} /> },
-    { value: "friends", icon: <PeopleAltIcon sx={{ fontSize: 24 }} /> },
-    { value: "requests", icon: <ContactMailIcon sx={{ fontSize: 24 }} /> },
-    {
-      value: "add_friend",
-      icon: <PersonAddRoundedIcon sx={{ fontSize: 24 }} />,
-    },
-  ];
+  // const PROFILE_TABS = [
+  //   { value: "profile", icon: <AccountBoxIcon sx={{ fontSize: 24 }} /> },
+  //   { value: "friends", icon: <PeopleAltIcon sx={{ fontSize: 24 }} /> },
+  //   { value: "requests", icon: <ContactMailIcon sx={{ fontSize: 24 }} /> },
+  //   {
+  //     value: "add_friend",
+  //     icon: <PersonAddRoundedIcon sx={{ fontSize: 24 }} />,
+  //   },
+  // ];
 
   return (
     <div>
-      <h1>HomePage</h1>
+      <h1>Hello</h1>
     </div>
   );
 }

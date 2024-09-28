@@ -3,12 +3,15 @@ import React from "react";
 import MainHeader from "./MainHeader";
 import MainFooter from "./MainFooter";
 import { Outlet } from "react-router-dom";
+import Sidebar from "../components/Sidebar";
 
 function MainLayout() {
   return (
-    <Stack sx={{ minHeight: "100vh" }}>
+    <Stack sx={{ height: "100%" }}>
       <MainHeader />
+      <Sidebar />
       <Outlet />
+
       <Box sx={{ flexGrow: 1 }} />
       <MainFooter />
     </Stack>

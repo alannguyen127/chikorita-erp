@@ -90,7 +90,7 @@ function MainHeader() {
   );
 
   return (
-    <Box sx={{ mb: 3 }}>
+    <Box sx={{ mb: 3, flexGrow: 1 }}>
       <AppBar position="static" color="transparent">
         <Toolbar>
           <IconButton
@@ -103,7 +103,7 @@ function MainHeader() {
             <Logo />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            CoderComm
+            Chikorita ERP
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box>
