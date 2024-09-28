@@ -1,6 +1,6 @@
 import { Box, Toolbar } from "@mui/material";
 import React, { useState } from "react";
-import CustomerList from "../components/CustomerList";
+import ItemList from "../components/ItemList";
 
 function CustomerPage() {
   const [customers, setCustomers] = useState([
@@ -20,7 +20,12 @@ function CustomerPage() {
   return (
     <Box component="main">
       <Toolbar />
-      <CustomerList customers={customers} addCustomer={addCustomer} />
+      <ItemList
+        items={customers}
+        addItem={addCustomer}
+        listName={"Customer"}
+        buttonName={"Add Customer"}
+      />
     </Box>
   );
 }
