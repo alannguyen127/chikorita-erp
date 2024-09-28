@@ -26,7 +26,7 @@ Chikorita ERP is a comprehensive Enterprise Resource Planning (ERP) system desig
 
 Built with modern web technologies, the platform offers real-time updates, intuitive user interfaces, and scalable architecture, making it ideal for restaurants of all sizes.
 
-### User Story:
+<!-- ### User Story:
 
 #### As a Restaurant Owner (Admin):
 
@@ -41,7 +41,7 @@ Built with modern web technologies, the platform offers real-time updates, intui
 1. I want to view and manage all customer orders (new, pending, completed, cancelled) so that I can ensure they are processed efficiently and minimize errors.
 2. I want to assign orders to the kitchen and track their progress in real-time so that customers can be updated on the status of their orders.
 3. I want to handle customer inquiries regarding their orders (e.g., changing the order, delivery address, or handling complaints) so that I can provide excellent customer service.
-4. I want to notify customers when their orders are ready for pickup or out for delivery so that they know when to expect their meal.
+4. I want to notify customers when their orders are ready for pickup or out for delivery so that they know when to expect their meal. -->
 
 ### API Endponts:
 
@@ -60,16 +60,3 @@ Built with modern web technologies, the platform offers real-time updates, intui
 - POST /api/orders: Create a new order.
 - PUT /api/orders/{id}: Update an existing order.
 - DELETE /api/orders/{id}: Cancel or delete an order.
-
-### Diagram Relation:
-
-Below is a basic relationship diagram showing how different modules interact within the Chikorita ERP system:
-
-[Customer] <--- manages ---> [Order] <--- updates ---> [Kitchen]
-|
-v
-[Delivery] <--- manages stock from ---> [Inventory]
-
-- Customer: Linked with multiple orders and personal data management.
-- Order: Central entity connecting customer requests to both kitchen preparation and delivery.
-- Meal Package
