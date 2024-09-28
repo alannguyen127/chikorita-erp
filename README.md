@@ -2,6 +2,24 @@
 
 ## I'm owing an eatclean restaurant named Chikorita Eatclean. This application was built for managing my restaurant's operation.
 
+### Init Project
+
+- Install React, Redux
+
+```
+npm install react react-dom redux
+```
+
+- Install libraries
+
+```
+npm install @mui/material @emotion/react @emotion/styled
+npm install @mui/icons-material @mui/lab
+npm install react-router-dom react-hook-form @hookform/resolvers yup
+npm install axios numeral lodash jwt-decode change-case
+npm install react-markdown rehype-raw date-fns react-dropzone react-toastify
+```
+
 ### Project Description:
 
 Chikorita ERP is a comprehensive Enterprise Resource Planning (ERP) system designed specifically for EatClean online restaurants. The platform integrates multiple operational functions such as customer management, order processing, delivery tracking, kitchen management, and inventory control into a seamless system. Chikorita ERP streamlines day-to-day operations, ensuring restaurants can efficiently manage their workflows, improve customer satisfaction, and optimize their supply chains.
@@ -54,6 +72,4 @@ v
 
 - Customer: Linked with multiple orders and personal data management.
 - Order: Central entity connecting customer requests to both kitchen preparation and delivery.
-- Kitchen: Manages incoming orders and updates the status for staff visibility.
-- Delivery: Tracks the progress of orders being delivered to customers.
-- Inventory: Supplies the kitchen with ingredients and is automatically updated when orders are processed.
+- Meal Package
