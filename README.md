@@ -60,3 +60,8 @@ Built with modern web technologies, the platform offers real-time updates, intui
 - POST /api/orders: Create a new order.
 - PUT /api/orders/{id}: Update an existing order.
 - DELETE /api/orders/{id}: Cancel or delete an order.
+
+#### Meal Package Information
+
+- GET /api/meal_package: Retrieve all meal packages.
+- GET /api/meal_package/{id}: Get meal package details by meal package ID.
