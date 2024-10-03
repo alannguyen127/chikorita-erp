@@ -14,7 +14,7 @@ import {
   ChevronDoubleRightIcon,
 } from "@heroicons/react/solid";
 import { Button, PageButton } from "../utils/Button";
-import { SortDownIcon, SortUpIcon,SortIcon } from "../utils/Icons";
+import { SortDownIcon, SortUpIcon, SortIcon } from "../utils/Icons";
 import classNames from "classnames";
 // GlobalFilter Component
 function GlobalFilter({
@@ -33,7 +33,7 @@ function GlobalFilter({
       <span className="text-gray-700">Search: </span>
       <input
         type="text"
-        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
         value={value || ""}
         onChange={(e) => {
           setValue(e.target.value);
@@ -82,20 +82,20 @@ export function SelectColumnFilter({
   );
 }
 export function StatusPill({ value }) {
-    const status = value ? value.toLowerCase() : "unknown";
-  
-    return (
-      <span
-        className={classNames(
-          "px-3 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm",
-          status.startsWith("regular") ? "bg-green-100 text-green-700" : null,
-        status.startsWith("vip") ? "bg-yellow-100 text-yellow-700" : null,
-        )}
-      >
-        {status}
-      </span>
-    );
-  }
+  const status = value ? value.toLowerCase() : "unknown";
+
+  return (
+    <span
+      className={classNames(
+        "px-3 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm",
+        status.startsWith("regular") ? "bg-green-100 text-green-700" : null,
+        status.startsWith("vip") ? "bg-yellow-100 text-yellow-700" : null
+      )}
+    >
+      {status}
+    </span>
+  );
+}
 // Table Component
 function Table({ columns, data }) {
   // Use the useTable and useGlobalFilter hooks
@@ -167,24 +167,28 @@ function Table({ columns, data }) {
                     >
                       {headerGroup.headers.map((column) => (
                         <th
-                        scope="col"
-                        className="group px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        {...column.getHeaderProps(column.getSortByToggleProps())}
-                      >
-                        <div className="flex items-center justify-between">
-                          {column.render('Header')}
-                          {/* Add a sort direction indicator */}
-                          <span>
-                            {column.isSorted
-                              ? column.isSortedDesc
-                                ? <SortDownIcon className="w-4 h-4 text-gray-400" />
-                                : <SortUpIcon className="w-4 h-4 text-gray-400" />
-                              : (
+                          scope="col"
+                          className="group px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                          {...column.getHeaderProps(
+                            column.getSortByToggleProps()
+                          )}
+                        >
+                          <div className="flex items-center justify-between">
+                            {column.render("Header")}
+                            {/* Add a sort direction indicator */}
+                            <span>
+                              {column.isSorted ? (
+                                column.isSortedDesc ? (
+                                  <SortDownIcon className="w-4 h-4 text-gray-400" />
+                                ) : (
+                                  <SortUpIcon className="w-4 h-4 text-gray-400" />
+                                )
+                              ) : (
                                 <SortIcon className="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100" />
                               )}
-                          </span>
-                        </div>
-                      </th>
+                            </span>
+                          </div>
+                        </th>
                       ))}
                     </tr>
                   ))}
@@ -226,28 +230,29 @@ function Table({ columns, data }) {
           </Button>
         </div>
         <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-        <div className="flex gap-x-2 justify-center items-center">
-  <span className="text-gray-700">
-    Page <span className="font-medium">{state.pageIndex + 1}</span> of {pageOptions.length}
-  </span>
-  
-  <label>
-    <span className="sr-only">Items Per Page</span>
-    <select
-      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-      value={state.pageSize}
-      onChange={(e) => {
-        setPageSize(Number(e.target.value));
-      }}
-    >
-      {[5, 10, 20].map((pageSize) => (
-        <option key={pageSize} value={pageSize}>
-          Show {pageSize}
-        </option>
-      ))}
-    </select>
-  </label>
-</div>
+          <div className="flex gap-x-2 justify-center items-center">
+            <span className="text-gray-700">
+              Page <span className="font-medium">{state.pageIndex + 1}</span> of{" "}
+              {pageOptions.length}
+            </span>
+
+            <label>
+              <span className="sr-only">Items Per Page</span>
+              <select
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                value={state.pageSize}
+                onChange={(e) => {
+                  setPageSize(Number(e.target.value));
+                }}
+              >
+                {[5, 10, 20].map((pageSize) => (
+                  <option key={pageSize} value={pageSize}>
+                    Show {pageSize}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
 
           <div>
             <nav

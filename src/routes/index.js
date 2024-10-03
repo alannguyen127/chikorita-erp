@@ -14,6 +14,8 @@ import OrderDetailPage from "../pages/OrderDetailPage";
 import CustomerDetailPage from "../pages/CustomerDetailPage";
 import AuthRequire from "./AuthRequire";
 import MealPkgDetailPage from "../pages/MealPkgDetailPage";
+import AddCustomerPage from "../pages/AddCustomerPage";
+import AddOrderPage from "../pages/AddOrderPage";
 
 function Router() {
   return (
@@ -34,7 +36,9 @@ function Router() {
         {/* <Route path="report" element={<AccountPage />} /> */}
 
         <Route path="customer/:customerId" element={<CustomerDetailPage />} />
+        <Route path="customer/add_customer" element={<AddCustomerPage />} />
         <Route path="order/:orderID" element={<OrderDetailPage />} />
+        <Route path="order/add_order" element={<AddOrderPage />} />
         <Route
           path="meal_package/:meal_packageID"
           element={<MealPkgDetailPage />}
