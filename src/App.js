@@ -1,15 +1,15 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import Router from "./routes";
-import { AuthProvider } from "./context/AuthContext";
 import "./App.css";
+import { FrappeProvider } from "frappe-react-sdk";
 function App() {
   return (
-    <AuthProvider>
+    <FrappeProvider>
       <BrowserRouter>
         <Router />
       </BrowserRouter>
-    </AuthProvider>
+    </FrappeProvider>
   );
 }
 

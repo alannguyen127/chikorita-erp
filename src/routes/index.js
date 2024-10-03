@@ -12,7 +12,6 @@ import OrderPage from "../pages/OrderPage";
 import MealPackagePage from "../pages/MealPackagePage";
 import OrderDetailPage from "../pages/OrderDetailPage";
 import CustomerDetailPage from "../pages/CustomerDetailPage";
-import AuthRequire from "./AuthRequire";
 import MealPkgDetailPage from "../pages/MealPkgDetailPage";
 import AddCustomerPage from "../pages/AddCustomerPage";
 import AddOrderPage from "../pages/AddOrderPage";
@@ -20,14 +19,7 @@ import AddOrderPage from "../pages/AddOrderPage";
 function Router() {
   return (
     <Routes>
-      <Route
-        path="/"
-        element={
-          <AuthRequire>
-            <MainLayout />
-          </AuthRequire>
-        }
-      >
+      <Route path="/" element={<MainLayout />}>
         <Route index element={<HomePage />} />
         <Route path="customer" element={<CustomerPage />} />
         <Route path="order" element={<OrderPage />} />

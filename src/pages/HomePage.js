@@ -5,6 +5,7 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 import PersonAddRoundedIcon from "@mui/icons-material/PersonAddRounded";
 import Sidebar from "../components/Sidebar";
+import { DocumentData } from "../components/DocumentData";
 
 function HomePage() {
   // const { user } = useAuth;
@@ -14,7 +15,7 @@ function HomePage() {
   //   setCurrentTab(newValue);
   // };
 
-  return <div>Hello</div>;
+  return DocumentData;
 }
 
 export default HomePage;

@@ -10,7 +10,7 @@ const drawerWidth = 120;
 function MainLayout() {
   return (
     <Stack sx={{ height: "100%" }}>
-      <MainHeader />
+      {/* <MainHeader /> */}
 
       <Box sx={{ display: "flex", flexGrow: 1 }}>
         <Box sx={{ width: drawerWidth, flexShrink: 0 }}>
@@ -29,7 +29,7 @@ function MainLayout() {
         </Box>
       </Box>
 
-      <MainFooter />
+      {/* <MainFooter /> */}
     </Stack>
   );
 }

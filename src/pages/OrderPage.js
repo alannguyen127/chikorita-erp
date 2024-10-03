@@ -2,6 +2,7 @@ import { Box, Toolbar } from "@mui/material";
 import React, { useState } from "react";
 import ItemList from "../components/ItemList";
 import { useNavigate } from "react-router-dom";
+import { DocumentData } from "../components/DocumentData";
 
 function OrderPage() {
   const [orders, setOrders] = useState([{ id: 1, name: "Order 1" }]);
@@ -18,6 +19,7 @@ function OrderPage() {
         listName={"Orders:"}
         buttonName={"Add Order"}
       />
+      <DocumentData />
     </Box>
   );
 }
