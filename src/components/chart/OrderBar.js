@@ -11,7 +11,6 @@ import {
 } from "chart.js";
 import { Box } from "@mui/material";
 
-// Đăng ký các thành phần cần thiết của Chart.js
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -22,24 +21,22 @@ ChartJS.register(
 );
 
 const OrdersBarChart = () => {
-  // Dữ liệu cho số lượng đơn hàng theo ngày
-
   const data = {
-    labels: ["01/10", "02/10", "03/10", "04/10", "05/10", "06/10", "07/10"], // Nhãn ngày
+    labels: ["01/10", "02/10", "03/10", "04/10", "05/10", "06/10", "07/10"],
     datasets: [
       {
-        label: "Khách hàng cũ", // Nhãn cho khách hàng cũ
-        data: [5, 10, 8, 12, 15, 18, 20], // Dữ liệu số lượng đơn hàng của khách hàng cũ
-        backgroundColor: "rgba(255, 99, 132, 0.6)", // Màu cột cho khách hàng cũ (đỏ nhạt)
-        borderColor: "rgba(255, 99, 132, 1)", // Màu viền cột cho khách hàng cũ
-        borderWidth: 1, // Độ dày viền
+        label: "Khách hàng cũ",
+        data: [5, 10, 8, 12, 15, 18, 20],
+        backgroundColor: "rgba(255, 99, 132, 0.6)",
+        borderColor: "rgba(255, 99, 132, 1)",
+        borderWidth: 1,
       },
       {
-        label: "Khách hàng mới", // Nhãn cho khách hàng mới
-        data: [5, 10, 10, 10, 10, 12, 15], // Dữ liệu số lượng đơn hàng của khách hàng mới
-        backgroundColor: "rgba(54, 162, 235, 0.6)", // Màu cột cho khách hàng mới (xanh nhạt)
-        borderColor: "rgba(54, 162, 235, 1)", // Màu viền cột cho khách hàng mới
-        borderWidth: 1, // Độ dày viền
+        label: "Khách hàng mới",
+        data: [5, 10, 10, 10, 10, 12, 15],
+        backgroundColor: "rgba(54, 162, 235, 0.6)",
+        borderColor: "rgba(54, 162, 235, 1)",
+        borderWidth: 1,
       },
     ],
   };
@@ -48,19 +45,19 @@ const OrdersBarChart = () => {
     responsive: true,
     plugins: {
       legend: {
-        position: "top", // Vị trí hiển thị chú thích
+        position: "top",
       },
       title: {
         display: true,
-        text: "Số lượng đơn hàng theo ngày", // Tiêu đề biểu đồ
+        text: "Số lượng đơn hàng theo ngày",
       },
     },
     scales: {
       y: {
-        beginAtZero: true, // Trục y bắt đầu từ 0
+        beginAtZero: true,
         ticks: {
           callback: function (value) {
-            return value + " đơn"; // Hiển thị đơn vị "đơn" trên trục y
+            return value + " đơn";
           },
         },
       },

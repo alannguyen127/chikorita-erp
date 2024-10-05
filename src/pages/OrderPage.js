@@ -1,11 +1,11 @@
 import { Box, Toolbar } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import ItemList from "../components/ItemList";
 import { useNavigate } from "react-router-dom";
 import { DocumentData } from "../components/DocumentData";
 
 function OrderPage() {
-  const [orders, setOrders] = useState([{ id: 1, name: "Order 1" }]);
+  const orders = [{ id: 1, name: "Order 1" }];
   const navigate = useNavigate();
   const addOrder = () => {
     navigate("/order/add_order");

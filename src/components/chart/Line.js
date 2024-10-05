@@ -33,7 +33,7 @@ function LineGraph() {
         borderColor: "rgba(75, 192, 192, 1)",
         backgroundColor: "rgba(75, 192, 192, 0.2)",
         fill: true,
-        tension: 0.4, // Làm cho đường cong mềm mại hơn
+        tension: 0.4,
       },
       {
         label: "Doanh thu từ khách hàng cũ",
@@ -41,7 +41,7 @@ function LineGraph() {
         borderColor: "rgba(153, 102, 255, 1)",
         backgroundColor: "rgba(153, 102, 255, 0.2)",
         fill: true,
-        tension: 0.4, // Làm cho đường cong mềm mại hơn
+        tension: 0.4,
       },
     ],
   };

@@ -12,7 +12,6 @@ import {
 import { Box } from "@mui/material";
 import { fCurrency } from "../../utils/numberFormat";
 
-// Đăng ký các thành phần của Chart.js
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -30,9 +29,9 @@ const RevenueBarChart = () => {
         label: "Doanh thu",
         data: [
           30000000, 40000000, 50000000, 45000000, 60000000, 70000000, 80000000,
-        ], // Dữ liệu doanh thu theo ngày
-        backgroundColor: "rgba(75, 192, 192, 0.6)", // Màu của các cột
-        borderColor: "rgba(75, 192, 192, 1)", // Màu đường viền của cột
+        ],
+        backgroundColor: "rgba(75, 192, 192, 0.6)",
+        borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 1,
       },
     ],

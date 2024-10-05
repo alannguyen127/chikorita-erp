@@ -42,8 +42,8 @@ const GenderPieChart = () => {
         callbacks: {
           label: function (tooltipItem) {
             const label = tooltipItem.label;
-            const value = tooltipItem.raw; // Lấy số lượng khách hàng
-            return `${label}: ${value} khách hàng`; // Hiển thị số lượng khách hàng
+            const value = tooltipItem.raw;
+            return `${label}: ${value} khách hàng`;
           },
         },
       },
