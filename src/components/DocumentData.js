@@ -3,14 +3,15 @@ import React from "react";
 
 export const DocumentData = () => {
   const { data, error, isValidating, mutate } = useFrappeGetDoc(
-    "EFE Customer",
-    "q2b7gok95v",
+    "User",
+    "huannghiem2711@gmail.com",
     {
       /** SWR Configuration Options - Optional **/
     }
   );
-  console.log("Loaded");
+
   if (isValidating) {
+    console.log("Loaded");
     return <>Loading</>;
   }
   if (error) {

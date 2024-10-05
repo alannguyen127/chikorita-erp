@@ -15,17 +15,28 @@ import CustomerDetailPage from "../pages/CustomerDetailPage";
 import MealPkgDetailPage from "../pages/MealPkgDetailPage";
 import AddCustomerPage from "../pages/AddCustomerPage";
 import AddOrderPage from "../pages/AddOrderPage";
+import AuthRequire from "./AuthRequire";
+import DashboadPage from "../pages/DashboadPage";
+// import { useAuth } from "../context/AuthContext";
 
 function Router() {
+  // const { currentUser } = useAuth();
+  // console.log("log from router: ", currentUser);
   return (
     <Routes>
-      <Route path="/" element={<MainLayout />}>
-        <Route index element={<HomePage />} />
+      <Route
+        path="/"
+        element={
+          <AuthRequire>
+            <MainLayout />
+          </AuthRequire>
+        }
+      >
+        <Route index element={<DashboadPage />} />
         <Route path="customer" element={<CustomerPage />} />
         <Route path="order" element={<OrderPage />} />
         <Route path="meal_package" element={<MealPackagePage />} />
         <Route path="account" element={<AccountPage />} />
-        {/* <Route path="report" element={<AccountPage />} /> */}
 
         <Route path="customer/:customerId" element={<CustomerDetailPage />} />
         <Route path="customer/add_customer" element={<AddCustomerPage />} />

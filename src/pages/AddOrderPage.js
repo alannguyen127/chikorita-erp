@@ -24,6 +24,8 @@ import { customers } from "../test_data/customers";
 
 import { mealPackages } from "../test_data/meal_package";
 
+import { fCurrency } from "../utils/numberFormat";
+
 // Validation schema
 const schema = yup.object().shape({
   customerName: yup.string().required("Customer is required"),
@@ -80,7 +82,7 @@ const AddOrderPage = () => {
   return (
     <Container>
       <Typography variant="h5" align="center">
-        Add Customer
+        Add New Order
       </Typography>
 
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -250,7 +252,8 @@ const AddOrderPage = () => {
                       render={({ field }) => (
                         <TextField
                           {...field}
-                          type="number"
+                          type="text"
+                          value={fCurrency(field.value)}
                           fullWidth
                           disabled
                         />
@@ -264,7 +267,8 @@ const AddOrderPage = () => {
                       render={({ field }) => (
                         <TextField
                           {...field}
-                          type="number"
+                          type="text"
+                          value={fCurrency(field.value)}
                           fullWidth
                           disabled
                         />
@@ -314,7 +318,8 @@ const AddOrderPage = () => {
         {/* Total Amount */}
         <TextField
           label="Total Amount"
-          value={calculateTotalAmount()}
+          type="text"
+          value={fCurrency(calculateTotalAmount())}
           fullWidth
           margin="normal"
           disabled

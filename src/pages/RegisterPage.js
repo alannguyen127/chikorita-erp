@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import useAuth from "../hooks/useAuth";
+
 import { FormProvider, FTextField } from "../components/form";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -16,6 +16,7 @@ import {
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { LoadingButton } from "@mui/lab";
+import { useAuth } from "../context/AuthContext";
 
 const RegisterSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),

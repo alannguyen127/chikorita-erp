@@ -7,16 +7,19 @@ import IconButton from "@mui/material/IconButton";
 
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import useAuth from "../hooks/useAuth";
 import Logo from "../components/Logo";
 import { Avatar, Divider } from "@mui/material";
 
 import { useNavigate, Link as RouterLink } from "react-router-dom";
+import { useFrappeAuth } from "frappe-react-sdk";
+import { useAuth } from "../context/AuthContext";
 
 function MainHeader() {
-  const { user, logout } = useAuth();
+  const { currentUser } = useFrappeAuth();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
+  console.log("main header", user, currentUser);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -29,9 +32,8 @@ function MainHeader() {
   const handleLogout = async () => {
     try {
       handleMenuClose();
-      await logout(() => {
-        navigate("/login");
-      });
+      await logout();
+      navigate("/login");
     } catch (error) {
       console.log(error);
     }
@@ -54,11 +56,8 @@ function MainHeader() {
       onClose={handleMenuClose}
     >
       <Box sx={{ my: 1.5, px: 2.5 }}>
-        <Typography variant="subtitle2" noWrap>
-          {user?.name}
-        </Typography>
         <Typography variant="body2" sx={{ color: "text.secondary" }} noWrap>
-          {user?.email}
+          {currentUser}
         </Typography>
       </Box>
 
@@ -92,7 +91,7 @@ function MainHeader() {
 
   return (
     <Box sx={{ mb: 3, flexGrow: 1 }}>
-      <AppBar position="static" color="transparent">
+      <AppBar position="fixed" color="success">
         <Toolbar>
           <IconButton
             size="large"
@@ -107,13 +106,13 @@ function MainHeader() {
             Chikorita ERP
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
-          <Box>
-            <Avatar
-              src={user.avatarUrl}
-              alt={user.name}
-              onClick={handleProfileMenuOpen}
-            />
-          </Box>
+
+          <Avatar
+            src={user?.user_image}
+            alt={user?.name}
+            onClick={handleProfileMenuOpen}
+          />
+
           {renderMenu}
         </Toolbar>
       </AppBar>

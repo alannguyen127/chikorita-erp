@@ -2,31 +2,13 @@
 
 ## I'm owing an eatclean restaurant named Chikorita Eatclean. This application was built for managing my restaurant's operation.
 
-### Init Project
-
-- Install React, Redux
-
-```
-npm install react react-dom redux
-```
-
-- Install libraries
-
-```
-npm install @mui/material @emotion/react @emotion/styled
-npm install @mui/icons-material @mui/lab
-npm install react-router-dom react-hook-form @hookform/resolvers yup
-npm install axios numeral lodash jwt-decode change-case
-npm install react-markdown rehype-raw date-fns react-dropzone react-toastify
-```
-
 ### Project Description:
 
 Chikorita ERP is a comprehensive Enterprise Resource Planning (ERP) system designed specifically for EatClean online restaurants. The platform integrates multiple operational functions such as customer management, order processing, delivery tracking, kitchen management, and inventory control into a seamless system. Chikorita ERP streamlines day-to-day operations, ensuring restaurants can efficiently manage their workflows, improve customer satisfaction, and optimize their supply chains.
 
 Built with modern web technologies, the platform offers real-time updates, intuitive user interfaces, and scalable architecture, making it ideal for restaurants of all sizes.
 
-<!-- ### User Story:
+### User Story:
 
 #### As a Restaurant Owner (Admin):
 
@@ -41,7 +23,7 @@ Built with modern web technologies, the platform offers real-time updates, intui
 1. I want to view and manage all customer orders (new, pending, completed, cancelled) so that I can ensure they are processed efficiently and minimize errors.
 2. I want to assign orders to the kitchen and track their progress in real-time so that customers can be updated on the status of their orders.
 3. I want to handle customer inquiries regarding their orders (e.g., changing the order, delivery address, or handling complaints) so that I can provide excellent customer service.
-4. I want to notify customers when their orders are ready for pickup or out for delivery so that they know when to expect their meal. -->
+4. I want to notify customers when their orders are ready for pickup or out for delivery so that they know when to expect their meal.
 
 ### API Endponts:
 
@@ -61,7 +43,17 @@ Built with modern web technologies, the platform offers real-time updates, intui
 - PUT /api/orders/{id}: Update an existing order.
 - DELETE /api/orders/{id}: Cancel or delete an order.
 
-#### Meal Package Information
+### Diagram Relation:
 
-- GET /api/meal_package: Retrieve all meal packages.
-- GET /api/meal_package/{id}: Get meal package details by meal package ID.
+Below is a basic relationship diagram showing how different modules interact within the Chikorita ERP system:
+
+[Customer] <--- manages ---> [Order] <--- updates ---> [Kitchen]
+|
+v
+[Delivery] <--- manages stock from ---> [Inventory]
+
+- Customer: Linked with multiple orders and personal data management.
+- Order: Central entity connecting customer requests to both kitchen preparation and delivery.
+- Kitchen: Manages incoming orders and updates the status for staff visibility.
+- Delivery: Tracks the progress of orders being delivered to customers.
+- Inventory: Supplies the kitchen with ingredients and is automatically updated when orders are processed.

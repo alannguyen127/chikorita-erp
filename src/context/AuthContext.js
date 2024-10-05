@@ -1,141 +1,60 @@
-import { createContext, useReducer, useEffect } from "react";
-import apiService from "../app/apiService";
-import { isValidToken } from "../utils/jwt";
+import { useFrappeAuth, useFrappeGetDoc, useSWRConfig } from "frappe-react-sdk";
+import { createContext, useState, useContext, useEffect } from "react";
 
 const initialState = {
-  isInitialized: false,
   isAuthenticated: false,
   user: null,
 };
 
-const INITIALIZE = "AUTH.INITIALIZE";
-const LOGIN_SUCCESS = "AUTH.LOGIN_SUCCESS";
-const REGISTER_SUCCESS = "AUTH.REGISTER_SUCCESS";
-const LOGOUT = "AUTH.LOGOUT";
-const UPDATE_PROFILE = "AUTH.UPDATE_PROFILE";
+const AuthContext = createContext(initialState);
 
-const reducer = (state, action) => {
-  switch (action.type) {
-    case INITIALIZE:
-      const { isAuthenticated, user } = action.payload;
-      return {
-        ...state,
-        isInitialized: true,
-        isAuthenticated,
-        user,
-      };
-    case LOGIN_SUCCESS:
-      return {
-        ...state,
-        isAuthenticated: true,
-        user: action.payload.user,
-      };
-    case REGISTER_SUCCESS:
-      return {
-        ...state,
-        isAuthenticated: true,
-        user: action.payload.user,
-      };
-    case LOGOUT:
-      return {
-        ...state,
-        isAuthenticated: false,
-        user: null,
-      };
-    default:
-      return state;
-  }
-};
+export function AuthProvider({ children }) {
+  const [auth, setAuth] = useState(initialState);
+  const { login, logout, currentUser } = useFrappeAuth();
 
-const AuthContext = createContext({ ...initialState });
+  const { mutate } = useSWRConfig();
 
-const setSession = (accessToken) => {
-  if (accessToken) {
-    window.localStorage.setItem("accessToken", accessToken);
-    apiService.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-  } else {
-    window.localStorage.removeItem("accessToken");
-    delete apiService.defaults.headers.common.Authorization;
-  }
-};
-
-function AuthProvider({ children }) {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const { data, error, isValidating } = useFrappeGetDoc("User", currentUser);
+  console.log("auth rerender", currentUser);
+  useEffect(() => {
+    if (data) {
+      setAuth({
+        user: data,
+      });
+    }
+  }, [data]);
 
   useEffect(() => {
-    const inititalize = async () => {
-      try {
-        const accessToken = window.localStorage.getItem("accessToken");
-
-        if (accessToken && isValidToken(accessToken)) {
-          setSession(accessToken);
-          const response = await apiService.get("/users/me");
-          const user = response.data;
-
-          dispatch({
-            type: INITIALIZE,
-            payload: { isAuthenticated: true, user },
-          });
-        } else {
-          setSession(null);
-          console.log("Failed to load User Info");
-          dispatch({
-            type: INITIALIZE,
-            payload: { isAuthenticated: false, user: null },
-          });
-        }
-      } catch (error) {
-        setSession(null);
-        console.log("error", error);
-        dispatch({
-          type: INITIALIZE,
-          payload: { isAuthenticated: false, user: null },
-        });
-      }
-    };
-
-    inititalize();
-  }, []);
-
-  const login = async ({ email, password }, callback) => {
-    const response = await apiService.post("/auth/login", { email, password });
-    const { user, accessToken } = response.data;
-
-    setSession(accessToken);
-
-    dispatch({
-      type: LOGIN_SUCCESS,
-      payload: { user },
+    console.log("current user:", currentUser);
+    setAuth({
+      isAuthenticated: !!currentUser,
+      user: currentUser ? auth.user : null,
     });
+    // mutate();
+  }, [currentUser, auth.user]);
 
-    callback();
-  };
+  console.log(auth, currentUser);
 
-  const register = async ({ name, email, password }, callback) => {
-    const response = await apiService.post("/users", { name, email, password });
-    const { user, accessToken } = response.data;
-
-    setSession(accessToken);
-
-    dispatch({
-      type: REGISTER_SUCCESS,
-      payload: { user },
-    });
-
-    callback();
-  };
-
-  const logout = (callback) => {
-    setSession(null); //delete all access token in local storage
-    dispatch({ type: LOGOUT });
-    callback();
+  const handleLogout = async () => {
+    await logout();
+    mutate(() => true, undefined, false);
+    window.location.replace("/login");
   };
 
   return (
-    <AuthContext.Provider value={{ ...state, login, register, logout }}>
+    <AuthContext.Provider
+      value={{ ...auth, currentUser, logout: handleLogout }}
+    >
       {children}
     </AuthContext.Provider>
   );
 }
 
-export { AuthContext, AuthProvider };
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+
+  if (context === undefined)
+    throw new Error("useAuth must be used within a AuthProvider");
+
+  return context;
+};

@@ -4,7 +4,7 @@ import { FCheckbox, FormProvider, FTextField } from "../components/form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useLocation, useNavigate, Link as RouterLink } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
+
 import {
   Alert,
   Container,
@@ -17,6 +17,7 @@ import {
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { LoadingButton } from "@mui/lab";
+import { useFrappeAuth } from "frappe-react-sdk";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -30,7 +31,8 @@ const defaultValues = {
 };
 
 function LoginPage() {
-  const auth = useAuth();
+  const { login, currentUser } = useFrappeAuth();
+
   const methods = useForm({
     resolver: yupResolver(LoginSchema),
     defaultValues,
@@ -50,9 +52,8 @@ function LoginPage() {
     const from = location.state?.from?.pathname || "/";
     let { email, password } = data;
     try {
-      await auth.login({ email, password }, () => {
-        navigate(from, { replace: true });
-      });
+      await login({ username: email, password });
+      window.location.replace("/");
     } catch (error) {
       reset();
       setError("responseError", error);
