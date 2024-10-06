@@ -1,7 +1,7 @@
-import { Box, Toolbar } from "@mui/material";
+import { Box } from "@mui/material";
 import React, { useState } from "react";
-import ItemList from "../components/ItemList";
 import { useNavigate } from "react-router-dom";
+import CustomerList from "../components/CustomerList";
 
 // Auto generate customer (Duc Nguyen)
 const generateCustomers = (num) => {
@@ -55,8 +55,7 @@ function CustomerPage() {
   };
   return (
     <Box component="main">
-      <Toolbar />
-      <ItemList
+      <CustomerList
         items={customers}
         addItem={addCustomer}
         listName={"Customers:"}

@@ -1,8 +1,9 @@
-import { Box, Toolbar } from "@mui/material";
+import { Box } from "@mui/material";
 import React from "react";
-import ItemList from "../components/ItemList";
+
 import { useNavigate } from "react-router-dom";
-import { DocumentData } from "../components/DocumentData";
+
+import OrderList from "../components/OrderList";
 
 function OrderPage() {
   const orders = [{ id: 1, name: "Order 1" }];
@@ -11,15 +12,13 @@ function OrderPage() {
     navigate("/order/add_order");
   };
   return (
-    <Box component="main">
-      <Toolbar />
-      <ItemList
+    <Box sx={{ flexGrow: 1 }}>
+      <OrderList
         items={orders}
         addItem={addOrder}
         listName={"Orders:"}
         buttonName={"Add Order"}
       />
-      <DocumentData />
     </Box>
   );
 }

@@ -1,40 +1,64 @@
-import React from "react";
-import { Drawer, List, ListItem, ListItemText, Divider } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  Divider,
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import PeopleIcon from "@mui/icons-material/People";
+import ReceiptIcon from "@mui/icons-material/Receipt";
+import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
 
-function Sidebar() {
+const Sidebar = () => {
+  const [selectedTab, setSelectedTab] = useState("Dashboard"); // Tab mặc định là "Dashboard"
+  const navigate = useNavigate();
+  const tabs = [
+    { text: "Dashboard", icon: <DashboardIcon />, link: "/" },
+    { text: "Customer", icon: <PeopleIcon />, link: "/customer" },
+    { text: "Order", icon: <ReceiptIcon />, link: "/order" },
+    {
+      text: "Meal Package",
+      icon: <RestaurantMenuIcon />,
+      link: "/meal_package",
+    },
+  ];
+
   return (
     <Drawer
       variant="permanent"
       anchor="left"
-      sx={{
-        width: 240,
-        flexShrink: 0,
-        [`& .MuiDrawer-paper`]: {
+      PaperProps={{
+        style: {
           width: 240,
+          backgroundColor: "#f4f4f4",
           boxSizing: "border-box",
-          top: "74px",
+          top: "65px",
         },
       }}
     >
-      <div />
       <Divider />
       <List>
-        <ListItem button to="/" component={RouterLink}>
-          <ListItemText primary="Dashboard" />
-        </ListItem>
-        <ListItem button to="/customer" component={RouterLink}>
-          <ListItemText primary="Customer" />
-        </ListItem>
-        <ListItem button to="/order" component={RouterLink}>
-          <ListItemText primary="Order" />
-        </ListItem>
-        <ListItem button to="/meal_package" component={RouterLink}>
-          <ListItemText primary="Meal Package" />
-        </ListItem>
+        {tabs.map((tab, index) => (
+          <ListItem
+            button
+            key={index}
+            onClick={() => {
+              setSelectedTab(tab.text);
+              navigate(tab.link);
+            }}
+            selected={selectedTab === tab.text}
+          >
+            <ListItemIcon>{tab.icon}</ListItemIcon>
+            <ListItemText primary={tab.text} />
+          </ListItem>
+        ))}
       </List>
     </Drawer>
   );
-}
+};
 
 export default Sidebar;
