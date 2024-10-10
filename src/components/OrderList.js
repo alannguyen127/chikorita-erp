@@ -1,21 +1,24 @@
 import React from "react";
 import { Button, Typography } from "@mui/material";
 import Table, { SelectColumnFilter, StatusPill } from "./Table";
+import { useNavigate } from "react-router-dom";
 
 const OrderList = ({ items, addItem, listName, buttonName }) => {
   // Function to return the items
   const getData = () => items;
 
+  const navigate = useNavigate();
+
   // Table columns definition
   const columns = React.useMemo(
     () => [
-      {
-        Header: "Id",
-        accessor: "id",
-      },
+      // {
+      //   Header: "Id",
+      //   accessor: "name",
+      // },
       {
         Header: "Customer Name",
-        accessor: "customer_name",
+        accessor: "customer_full_name",
       },
       {
         Header: "Order Date",
@@ -30,7 +33,7 @@ const OrderList = ({ items, addItem, listName, buttonName }) => {
       },
       {
         Header: "Payment Status",
-        accessor: "paymen_status",
+        accessor: "payment_status",
         Filter: SelectColumnFilter,
         filter: "includes",
         Cell: StatusPill,
@@ -50,24 +53,29 @@ const OrderList = ({ items, addItem, listName, buttonName }) => {
   // Memoized data
   const data = React.useMemo(() => getData(), [items]);
 
+  const handleRowClick = (orderId) => {
+    navigate(`/order/:${orderId}`);
+  };
+
   return (
     <div>
-      <Typography variant="h4" gutterBottom>
-        {listName}
-      </Typography>
-      <Button
-        variant="contained"
-        color="primary"
-        sx={{ mb: "20px" }}
-        onClick={addItem}
-      >
-        {buttonName}
-      </Button>
-
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <Typography variant="h5" gutterBottom>
+          {listName}
+        </Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          sx={{ mb: "20px" }}
+          onClick={addItem}
+        >
+          {buttonName}
+        </Button>
+      </div>
       <div className="min-h-screen bg-gray-100 text-gray-900">
         <main className="mx-auto px-4 sm:px-6 lg:px-8 pt-4">
           <div className="mt-4 ">
-            <Table columns={columns} data={data} />
+            <Table columns={columns} data={data} onRowClick={handleRowClick} />
           </div>
         </main>
       </div>

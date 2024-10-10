@@ -2,13 +2,15 @@ import React from "react";
 import LineGraph from "../components/chart/Line";
 import Grid from "@mui/material/Grid2";
 import GenderPieChart from "../components/chart/Pie";
-import { Box } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import RevenueBarChart from "../components/chart/Bar";
 import OrdersBarChart from "../components/chart/OrderBar";
+import MyDateRangePicker from "../components/DateRangePicker";
 
 function DashboadPage() {
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Stack>
+      <MyDateRangePicker />
       <Grid container spacing={2}>
         <Grid size={6}>
           <LineGraph />
@@ -23,7 +25,7 @@ function DashboadPage() {
           <OrdersBarChart />
         </Grid>
       </Grid>
-    </Box>
+    </Stack>
   );
 }
 

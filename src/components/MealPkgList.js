@@ -9,13 +9,17 @@ const MealPkgList = ({ items, addItem, listName, buttonName }) => {
   // Table columns definition
   const columns = React.useMemo(
     () => [
-      {
-        Header: "Id",
-        accessor: "id",
-      },
+      // {
+      //   Header: "ID",
+      //   accessor: "name",
+      // },
       {
         Header: "Package Name",
-        accessor: "name",
+        accessor: "title",
+      },
+      {
+        Header: "Short Name",
+        accessor: "short_title",
       },
       {
         Header: "Size",
@@ -33,14 +37,14 @@ const MealPkgList = ({ items, addItem, listName, buttonName }) => {
       },
       {
         Header: "Meals Per Day",
-        accessor: "meal_per_day",
+        accessor: "meals_per_day",
         Filter: SelectColumnFilter,
         filter: "includes",
         Cell: StatusPill,
       },
       {
         Header: "Unit Price",
-        accessor: "unitPrice",
+        accessor: "unit_price",
       },
     ],
     []
@@ -51,7 +55,7 @@ const MealPkgList = ({ items, addItem, listName, buttonName }) => {
 
   return (
     <div>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h5" gutterBottom>
         {listName}
       </Typography>
 

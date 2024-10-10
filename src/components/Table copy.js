@@ -7,7 +7,6 @@ import {
   useSortBy,
   usePagination,
 } from "react-table";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
 import {
   ChevronDoubleLeftIcon,
   ChevronLeftIcon,
@@ -17,7 +16,6 @@ import {
 import { Button, PageButton } from "../utils/Button";
 import { SortDownIcon, SortUpIcon, SortIcon } from "../utils/Icons";
 import classNames from "classnames";
-
 // GlobalFilter Component
 function GlobalFilter({
   preGlobalFilteredRows,
@@ -98,11 +96,9 @@ export function StatusPill({ value }) {
     </span>
   );
 }
-
 // Table Component
-function Table({ columns, data, onRowClick }) {
-  const navigate = useNavigate(); // Khởi tạo hook điều hướng
-
+function Table({ columns, data }) {
+  // Use the useTable and useGlobalFilter hooks
   const {
     getTableProps,
     getTableBodyProps,
@@ -118,16 +114,16 @@ function Table({ columns, data, onRowClick }) {
     nextPage,
     previousPage,
     setPageSize,
-    state,
-    preGlobalFilteredRows,
-    setGlobalFilter,
+    state, // Destructure state to access globalFilter
+    preGlobalFilteredRows, // Rows before filtering
+    setGlobalFilter, // Function to set the global filter
   } = useTable(
     {
       columns,
       data,
     },
     useFilters,
-    useGlobalFilter,
+    useGlobalFilter, // Add global filtering to the table
     useSortBy,
     usePagination
   );
@@ -135,16 +131,18 @@ function Table({ columns, data, onRowClick }) {
   return (
     <>
       <div className="flex w-full gap-x-2">
+        {/* Render Global Filter */}
         <GlobalFilter
           preGlobalFilteredRows={preGlobalFilteredRows}
           globalFilter={state.globalFilter}
           setGlobalFilter={setGlobalFilter}
         />
+        {/* new */}
         {headerGroups.map((headerGroup) =>
           headerGroup.headers.map((column) =>
             column.Filter ? (
               <div key={column.id}>
-                <label htmlFor={column.id}>{column.render("Header")}: </label>
+                <label for={column.id}>{column.render("Header")}: </label>
                 {column.render("Filter")}
               </div>
             ) : null
@@ -152,6 +150,7 @@ function Table({ columns, data, onRowClick }) {
         )}
       </div>
 
+      {/* Render the table */}
       <div className="mt-2 flex flex-col">
         <div className="-my-2 overflow-x-auto -mx-4 sm:-mx-6 lg:-mx-8">
           <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -176,6 +175,7 @@ function Table({ columns, data, onRowClick }) {
                         >
                           <div className="flex items-center justify-between">
                             {column.render("Header")}
+                            {/* Add a sort direction indicator */}
                             <span>
                               {column.isSorted ? (
                                 column.isSortedDesc ? (
@@ -200,12 +200,7 @@ function Table({ columns, data, onRowClick }) {
                   {page.map((row, i) => {
                     prepareRow(row);
                     return (
-                      <tr
-                        {...row.getRowProps()}
-                        key={row.id}
-                        onClick={() => onRowClick(row.original.id)} // Thêm sự kiện onClick
-                        className="cursor-pointer hover:bg-gray-100" // Thêm class để hiển thị hiệu ứng khi hover
-                      >
+                      <tr {...row.getRowProps()} key={row.id}>
                         {row.cells.map((cell) => {
                           return (
                             <td
@@ -225,7 +220,6 @@ function Table({ columns, data, onRowClick }) {
           </div>
         </div>
       </div>
-
       <div className="pagination">
         <div className="flex-1 flex justify-between sm:hidden">
           <Button onClick={() => previousPage()} disabled={!canPreviousPage}>

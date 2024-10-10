@@ -9,32 +9,24 @@ const drawerWidth = 80;
 
 function MainLayout() {
   return (
-    <Stack>
+    <div>
       <MainHeader />
-      <Container sx={{ display: "flex", mt: `${drawerWidth}px` }}>
-        <Sidebar />
 
-        {/* <Box
-          component="main"
-          sx={{
-            flexGrow: 1,
-            ml: `${drawerWidth}px`,
-            mt: `${drawerWidth - 80}px`,
-            padding: 3,
-          }} */}
-        {/* > */}
-        {/* <Box component="main" sx={{ mt: `${drawerWidth}px`, flexGrow: 1 }}> */}
+      <Sidebar />
 
+      <Container
+        sx={{
+          display: "flex",
+          mt: `${drawerWidth}px`,
+          ml: `${drawerWidth * 3}px`,
+          flex: "1",
+        }}
+      >
         <Outlet />
       </Container>
 
-      {/* </Box> */}
-
-      {/* </Box> */}
-      {/* </Container> */}
-
       <MainFooter />
-    </Stack>
+    </div>
   );
 }
 
