@@ -7,7 +7,6 @@ import {
   useSortBy,
   usePagination,
 } from "react-table";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
 import {
   ChevronDoubleLeftIcon,
   ChevronLeftIcon,
@@ -101,8 +100,6 @@ export function StatusPill({ value }) {
 
 // Table Component
 function Table({ columns, data, onRowClick }) {
-  const navigate = useNavigate(); // Khởi tạo hook điều hướng
-
   const {
     getTableProps,
     getTableBodyProps,
@@ -203,8 +200,11 @@ function Table({ columns, data, onRowClick }) {
                       <tr
                         {...row.getRowProps()}
                         key={row.id}
-                        onClick={() => onRowClick(row.original.id)} // Thêm sự kiện onClick
-                        className="cursor-pointer hover:bg-gray-100" // Thêm class để hiển thị hiệu ứng khi hover
+                        onClick={() => {
+                          onRowClick(row.original.name);
+                          console.log("Click row", row.original.name);
+                        }}
+                        className="cursor-pointer hover:bg-gray-100" // Hiển thị hiệu ứng khi hover
                       >
                         {row.cells.map((cell) => {
                           return (

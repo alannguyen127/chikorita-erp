@@ -19,7 +19,7 @@ function MainHeader() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate();
   const { user, logout } = useAuth();
-  console.log("main header", user, currentUser);
+  // console.log("main header", user, currentUser);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);

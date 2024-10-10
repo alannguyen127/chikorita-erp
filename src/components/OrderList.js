@@ -12,10 +12,10 @@ const OrderList = ({ items, addItem, listName, buttonName }) => {
   // Table columns definition
   const columns = React.useMemo(
     () => [
-      // {
-      //   Header: "Id",
-      //   accessor: "name",
-      // },
+      {
+        Header: "Id",
+        accessor: "name",
+      },
       {
         Header: "Customer Name",
         accessor: "customer_full_name",
