@@ -11,20 +11,17 @@ function MainLayout() {
   return (
     <div>
       <MainHeader />
-
-      <Sidebar />
-
-      <Container
-        sx={{
-          display: "flex",
-          mt: `${drawerWidth}px`,
-          ml: `${drawerWidth * 3}px`,
-          flex: "1",
-        }}
-      >
-        <Outlet />
-      </Container>
-
+      <div style={{ marginTop: "64px", position: "relative" }}>
+        <Sidebar />
+        <div
+          className="p-[24px]"
+          style={{ marginLeft: `${drawerWidth * 3}px` }}
+        >
+          <Container>
+            <Outlet />
+          </Container>
+        </div>
+      </div>
       <MainFooter />
     </div>
   );

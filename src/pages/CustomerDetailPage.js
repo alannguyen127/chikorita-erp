@@ -1,30 +1,44 @@
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import {
   TextField,
   Button,
   Typography,
-  Grid,
   Select,
+  Grid,
   MenuItem,
   FormControl,
   InputLabel,
 } from "@mui/material";
+// import Grid from "@mui/material/Grid2";
+import { useFrappeGetCall } from "frappe-react-sdk";
 
 const CustomerDetailPage = () => {
-  // Khởi tạo state cho từng field
-  const [isEditing, setIsEditing] = useState(false);
-  const [customerDetails, setCustomerDetails] = useState({
-    nick_name: "JohnDoe",
-    full_name: "John Doe",
-    gender: "Male",
-    phone_number: "0123456789",
-    address_1: "123 Street",
-    address_2: "District 1",
-    address_3: "City",
-    special_note: "No peanuts",
-    status: "Active",
-  });
+  const name = useParams();
+  if (name) {
+    console.log("Param: ", name);
+  } else console.log("Param not found");
 
+  const [isEditing, setIsEditing] = useState(false);
+  // const [customerDetails, setCustomerDetails] = useState({
+  //   nick_name: "JohnDoe",
+  //   full_name: "John Doe",
+  //   gender: "Male",
+  //   phone_number: "0123456789",
+  //   address_1: "123 Street",
+  //   address_2: "District 1",
+  //   address_3: "City",
+  //   special_note: "No peanuts",
+  //   status: "Active",
+  // });
+
+  const { data, error, isLoading } = useFrappeGetCall(
+    "emfresh_erp.em_fresh_erp.api.customer.customer.get_customer_detail",
+    { name: name.customerId }
+  );
+
+  const customerDetail = data?.message.customer_detail;
+  console.log("Detail Data from server", customerDetail);
   // Hàm thay đổi trạng thái edit
   const handleEditClick = () => {
     setIsEditing(!isEditing);
@@ -33,9 +47,15 @@ const CustomerDetailPage = () => {
   // Hàm xử lý khi người dùng nhập vào
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setCustomerDetails({ ...customerDetails, [name]: value });
+    // setCustomerDetails({ ...customerDetails, [name]: value });
+    console.log(name, value);
   };
-
+  if (isLoading) {
+    return <>Loading</>;
+  }
+  if (error) {
+    return <>{JSON.stringify(error)}</>;
+  }
   return (
     <Grid container spacing={2} style={{ padding: 20 }}>
       <Grid item xs={12}>
@@ -46,7 +66,7 @@ const CustomerDetailPage = () => {
         <TextField
           label="Nick Name"
           name="nick_name"
-          value={customerDetails.nick_name}
+          value={customerDetail.nick_name}
           onChange={handleChange}
           disabled={!isEditing}
           fullWidth
@@ -57,7 +77,7 @@ const CustomerDetailPage = () => {
         <TextField
           label="Full Name"
           name="full_name"
-          value={customerDetails.full_name}
+          value={customerDetail.full_name}
           onChange={handleChange}
           disabled={!isEditing}
           fullWidth
@@ -69,7 +89,7 @@ const CustomerDetailPage = () => {
           <InputLabel>Gender</InputLabel>
           <Select
             name="gender"
-            value={customerDetails.gender}
+            value={customerDetail.gender}
             onChange={handleChange}
           >
             <MenuItem value="Male">Male</MenuItem>
@@ -83,7 +103,7 @@ const CustomerDetailPage = () => {
         <TextField
           label="Phone Number"
           name="phone_number"
-          value={customerDetails.phone_number}
+          value={customerDetail.phone_number}
           onChange={handleChange}
           disabled={!isEditing}
           fullWidth
@@ -94,7 +114,7 @@ const CustomerDetailPage = () => {
         <TextField
           label="Address 1"
           name="address_1"
-          value={customerDetails.address_1}
+          value={customerDetail.address_1}
           onChange={handleChange}
           disabled={!isEditing}
           fullWidth
@@ -105,7 +125,7 @@ const CustomerDetailPage = () => {
         <TextField
           label="Address 2"
           name="address_2"
-          value={customerDetails.address_2}
+          value={customerDetail.address_2}
           onChange={handleChange}
           disabled={!isEditing}
           fullWidth
@@ -116,7 +136,7 @@ const CustomerDetailPage = () => {
         <TextField
           label="Address 3"
           name="address_3"
-          value={customerDetails.address_3}
+          value={customerDetail.address_3}
           onChange={handleChange}
           disabled={!isEditing}
           fullWidth
@@ -127,7 +147,7 @@ const CustomerDetailPage = () => {
         <TextField
           label="Special Food Note"
           name="special_note"
-          value={customerDetails.special_note}
+          value={customerDetail.special_note}
           onChange={handleChange}
           disabled={!isEditing}
           fullWidth
@@ -139,7 +159,7 @@ const CustomerDetailPage = () => {
           <InputLabel>Status</InputLabel>
           <Select
             name="status"
-            value={customerDetails.status}
+            value={customerDetail.status}
             onChange={handleChange}
           >
             <MenuItem value="Active">Active</MenuItem>

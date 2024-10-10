@@ -10,10 +10,10 @@ const CustomerList = ({ items, addItem, listName, buttonName }) => {
   // Table columns definition
   const columns = React.useMemo(
     () => [
-      {
-        Header: "Id",
-        accessor: "name",
-      },
+      // {
+      //   Header: "Id",
+      //   accessor: "name",
+      // },
       {
         Header: "Nick Name",
         accessor: "nick_name",
@@ -49,7 +49,7 @@ const CustomerList = ({ items, addItem, listName, buttonName }) => {
   // Memoized data
   const data = React.useMemo(() => getData(), [items]);
   const handleRowClick = (customerId) => {
-    navigate(`/customer/:${customerId}`);
+    navigate(`/customer/${customerId}`);
   };
 
   return (

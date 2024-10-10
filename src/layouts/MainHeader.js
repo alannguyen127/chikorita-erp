@@ -90,33 +90,33 @@ function MainHeader() {
   );
 
   return (
-    <Box sx={{ mb: 3, flexGrow: 1 }}>
-      <AppBar position="fixed" color="success">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <Logo />
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Chikorita ERP
-          </Typography>
-          <Box sx={{ flexGrow: 1 }} />
+    // <Box sx={{ mb: 3, flexGrow: 1 }}>
+    <AppBar position="fixed" color="success" sx={{ zIndex: "9999" }}>
+      <Toolbar>
+        <IconButton
+          size="large"
+          edge="start"
+          color="inherit"
+          aria-label="menu"
+          sx={{ mr: 2 }}
+        >
+          <Logo />
+        </IconButton>
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          Chikorita ERP
+        </Typography>
+        <Box sx={{ flexGrow: 1 }} />
 
-          <Avatar
-            src={user?.user_image}
-            alt={user?.name}
-            onClick={handleProfileMenuOpen}
-          />
+        <Avatar
+          src={user?.user_image}
+          alt={user?.name}
+          onClick={handleProfileMenuOpen}
+        />
 
-          {renderMenu}
-        </Toolbar>
-      </AppBar>
-    </Box>
+        {renderMenu}
+      </Toolbar>
+    </AppBar>
+    // </Box>
   );
 }
 

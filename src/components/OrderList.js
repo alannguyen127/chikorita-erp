@@ -12,10 +12,10 @@ const OrderList = ({ items, addItem, listName, buttonName }) => {
   // Table columns definition
   const columns = React.useMemo(
     () => [
-      {
-        Header: "Id",
-        accessor: "name",
-      },
+      // {
+      //   Header: "Id",
+      //   accessor: "name",
+      // },
       {
         Header: "Customer Name",
         accessor: "customer_full_name",
@@ -54,7 +54,7 @@ const OrderList = ({ items, addItem, listName, buttonName }) => {
   const data = React.useMemo(() => getData(), [items]);
 
   const handleRowClick = (orderId) => {
-    navigate(`/order/:${orderId}`);
+    navigate(`/order/${orderId}`);
   };
 
   return (

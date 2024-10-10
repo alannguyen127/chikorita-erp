@@ -30,7 +30,7 @@ function OrderPage() {
       <OrderList
         items={orders}
         addItem={addOrder}
-        listName={"Orders:"}
+        listName={"Orders"}
         buttonName={"Add Order"}
       />
     </Box>

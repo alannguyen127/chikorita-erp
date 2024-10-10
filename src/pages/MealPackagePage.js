@@ -19,7 +19,7 @@ function MealPackagePage() {
 
   return (
     <Box component="main">
-      <MealPkgList items={meals} listName={"Meal Packages:"}></MealPkgList>
+      <MealPkgList items={meals} listName={"Meal Packages"}></MealPkgList>
     </Box>
   );
 }

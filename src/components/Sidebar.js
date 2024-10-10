@@ -37,7 +37,7 @@ const Sidebar = () => {
           width: 240,
           backgroundColor: "#f4f4f4",
           boxSizing: "border-box",
-          top: "65px",
+          top: "inherit",
         },
       }}
     >
