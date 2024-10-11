@@ -11,6 +11,9 @@ import {
 } from "chart.js";
 import { Box } from "@mui/material";
 import { fCurrency } from "../../utils/numberFormat";
+import { fDate } from "../../utils/formatTime";
+import { useFrappeGetCall } from "frappe-react-sdk";
+import LoadingScreen from "../LoadingScreen";
 
 ChartJS.register(
   CategoryScale,
@@ -20,35 +23,31 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+// [fDate(new Date())]
+const RevenueBarChart = ({ dateRange, startDate, endDate }) => {
+  // console.log("RevenueBarChart", dateRange, dateRange.length);
+  console.log(startDate, endDate);
 
-const RevenueBarChart = () => {
-  const data = {
-    labels: [
-      "01/10",
-      "02/10",
-      "03/10",
-      "04/10",
-      "05/10",
-      "06/10",
-      "07/10",
-      "8/10",
-      "01/10",
-      "02/10",
-      "03/10",
-      "04/10",
-      "05/10",
-      "06/10",
-      "07/10",
-      "8/10",
-    ],
+  const { data, error, isLoading } = useFrappeGetCall(
+    "emfresh_erp.em_fresh_erp.api.order.order.get_sales_data_by_date",
+    { start_date: startDate, end_date: endDate }
+  );
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+  const salesData = data?.message.sales_data;
+  console.log("sale data", salesData);
+
+  // if (error) {
+  //   return <p>{error}</p>;
+  // }
+
+  const revenueData = {
+    labels: dateRange.length > 0 ? dateRange : [],
     datasets: [
       {
         label: "Doanh thu",
-        data: [
-          30000000, 40000000, 50000000, 45000000, 60000000, 70000000, 80000000,
-          30000000, 40000000, 50000000, 45000000, 60000000, 70000000, 80000000,
-          30000000, 40000000,
-        ],
+        data: salesData ? salesData.map((sale) => sale.total_sales) : [],
         backgroundColor: "rgba(75, 192, 192, 0.6)",
         borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 1,
@@ -91,7 +90,7 @@ const RevenueBarChart = () => {
         marginTop: "20px",
       }}
     >
-      <Bar data={data} options={options} />
+      <Bar data={revenueData} options={options} />
     </Box>
   );
 };

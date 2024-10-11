@@ -20,7 +20,7 @@ const GenderPieChart = () => {
 
   const genderData = data?.message;
 
-  console.log("gender Data", genderData);
+  // console.log("gender Data", genderData);
 
   const chartData = {
     labels: ["Nam", "Nữ", "Không có thông tin"],

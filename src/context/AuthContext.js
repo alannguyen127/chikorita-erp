@@ -15,7 +15,7 @@ export function AuthProvider({ children }) {
   const { mutate } = useSWRConfig();
 
   const { data, error, isValidating } = useFrappeGetDoc("User", currentUser);
-  console.log("auth rerender", currentUser);
+  // console.log("auth rerender", currentUser);
   useEffect(() => {
     if (data) {
       setAuth({
@@ -25,7 +25,7 @@ export function AuthProvider({ children }) {
   }, [data]);
 
   useEffect(() => {
-    console.log("current user:", currentUser);
+    // console.log("current user:", currentUser);
     setAuth({
       isAuthenticated: !!currentUser,
       user: currentUser ? auth.user : null,
@@ -33,7 +33,7 @@ export function AuthProvider({ children }) {
     // mutate();
   }, [currentUser, auth.user]);
 
-  console.log(auth, currentUser);
+  // console.log(auth, currentUser);
 
   const handleLogout = async () => {
     await logout();

@@ -1,35 +1,47 @@
 import React, { useState } from "react";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { Box, TextField, Typography } from "@mui/material";
-import dayjs from "dayjs";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
+import { Box, Button, TextField, Typography } from "@mui/material";
+import { fDate } from "../utils/formatTime";
 
-export default function MyDateRangePicker() {
+export default function MyDateRangePicker({ onChange }) {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [totalDays, setTotalDays] = useState(0);
+  const [error, setError] = useState("");
+  // const [totalDays, setTotalDays] = useState(0);
 
   const handleDateChange = (newStartDate, newEndDate) => {
     setStartDate(newStartDate);
     setEndDate(newEndDate);
+    if (newStartDate && newEndDate && newEndDate >= newStartDate) {
+      setError("");
+    }
+  };
 
-    if (newStartDate && newEndDate) {
-      const diffDays = dayjs(newEndDate).diff(dayjs(newStartDate), "day");
-      setTotalDays(diffDays);
-    } else {
-      setTotalDays(0); // Nếu không chọn đủ cả 2 ngày thì reset lại tổng số ngày
+  const formatStartDate = startDate ? fDate(startDate) : null;
+  const formatEndDate = endDate ? fDate(endDate) : null;
+
+  const handleViewClick = () => {
+    if (endDate && startDate && endDate < startDate) {
+      setError("End Date cannot be before Start Date.");
+      return;
+    }
+    if (onChange && formatStartDate && formatEndDate) {
+      // Gửi dữ liệu formatStartDate và formatEndDate ra ngoài thông qua onChange
+      onChange(formatStartDate, formatEndDate);
     }
   };
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Box display="flex">
         <DatePicker
           label="Start Date"
           value={startDate}
           onChange={(newDate) => handleDateChange(newDate, endDate)}
           renderInput={(params) => <TextField {...params} />}
+          format="dd/MM/yyyy"
         />
         <Box sx={{ mx: 2, mt: 2 }}> - </Box>
         <DatePicker
@@ -37,11 +49,26 @@ export default function MyDateRangePicker() {
           value={endDate}
           onChange={(newDate) => handleDateChange(startDate, newDate)}
           renderInput={(params) => <TextField {...params} />}
+          format="dd/MM/yyyy"
         />
-        {/* <Typography variant="h6" sx={{ mt: 2 }}>
-          Total Days: {totalDays}
-        </Typography> */}
+        <Box sx={{ mx: 2, mt: 2 }}>
+          <Button variant="contained" color="primary" onClick={handleViewClick}>
+            View
+          </Button>
+        </Box>
       </Box>
+      {error && (
+        <Typography color="error" sx={{ mb: 2 }}>
+          {error}
+        </Typography>
+      )}
     </LocalizationProvider>
   );
 }
+
+// if (newStartDate && newEndDate) {
+//   const diffDays = dayjs(newEndDate).diff(dayjs(newStartDate), "day");
+//   setTotalDays(diffDays);
+// } else {
+//   setTotalDays(0); // Nếu không chọn đủ cả 2 ngày thì reset lại tổng số ngày
+// }
