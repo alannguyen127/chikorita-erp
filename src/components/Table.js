@@ -99,7 +99,7 @@ export function StatusPill({ value }) {
 }
 
 // Table Component
-function Table({ columns, data, onRowClick }) {
+function Table({ columns, data, onRowClick, searchColumns }) {
   const {
     getTableProps,
     getTableBodyProps,
@@ -122,6 +122,17 @@ function Table({ columns, data, onRowClick }) {
     {
       columns,
       data,
+      globalFilter: (rows, columnIds, filterValue) => {
+        // Tìm kiếm chỉ trong các cột mong muốn
+        columnIds = searchColumns;
+        return rows.filter((row) =>
+          columnIds.some((colId) =>
+            String(row.values[colId])
+              .toLowerCase()
+              .includes(String(filterValue).toLowerCase())
+          )
+        );
+      },
     },
     useFilters,
     useGlobalFilter,

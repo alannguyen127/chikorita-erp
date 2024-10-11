@@ -1,55 +1,71 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
   TextField,
   Button,
   Typography,
   Select,
-  Grid,
   MenuItem,
   FormControl,
   InputLabel,
 } from "@mui/material";
-// import Grid from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid2";
 import { useFrappeGetCall } from "frappe-react-sdk";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+// Validation schema using Yup
+const schema = yup.object().shape({
+  nick_name: yup
+    .string()
+    .required("Nick name is required")
+    .min(2, "Nick name must be at least 2 characters"),
+  phone_number: yup
+    .string()
+    .required("Phone number is required")
+    .matches(/^[0-9]+$/, "Phone number must be numeric"),
+  gender: yup.string().required("Gender is required"),
+  status: yup.string().required("Status is required"),
+  address_1: yup.string().required("Address is required"),
+});
 
 const CustomerDetailPage = () => {
-  const name = useParams();
-  if (name) {
-    console.log("Param: ", name);
-  } else console.log("Param not found");
+  const customerId = useParams();
+  // if (customerId) {
+  //   console.log("Param: ", customerId);
+  // } else console.log("Param not found");
 
   const [isEditing, setIsEditing] = useState(false);
-  // const [customerDetails, setCustomerDetails] = useState({
-  //   nick_name: "JohnDoe",
-  //   full_name: "John Doe",
-  //   gender: "Male",
-  //   phone_number: "0123456789",
-  //   address_1: "123 Street",
-  //   address_2: "District 1",
-  //   address_3: "City",
-  //   special_note: "No peanuts",
-  //   status: "Active",
-  // });
 
   const { data, error, isLoading } = useFrappeGetCall(
     "emfresh_erp.em_fresh_erp.api.customer.customer.get_customer_detail",
-    { name: name.customerId }
+    { customer_id: customerId.customerId }
   );
 
   const customerDetail = data?.message.customer_detail;
-  console.log("Detail Data from server", customerDetail);
-  // Hàm thay đổi trạng thái edit
+  // console.log("Detail Data from server", customerDetail);
+
   const handleEditClick = () => {
     setIsEditing(!isEditing);
   };
 
-  // Hàm xử lý khi người dùng nhập vào
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    // setCustomerDetails({ ...customerDetails, [name]: value });
-    console.log(name, value);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm();
+
+  useEffect(() => {
+    reset(customerDetail);
+  }, [JSON.stringify(customerDetail), reset]);
+
+  const onSubmit = (data) => {
+    console.log("Updated data: ", data);
   };
+
   if (isLoading) {
     return <>Loading</>;
   }
@@ -57,123 +73,119 @@ const CustomerDetailPage = () => {
     return <>{JSON.stringify(error)}</>;
   }
   return (
-    <Grid container spacing={2} style={{ padding: 20 }}>
-      <Grid item xs={12}>
-        <Typography variant="h4">Customer Details</Typography>
-      </Grid>
+    <>
+      <Typography variant="h5">Customer Details</Typography>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Grid container spacing={2} style={{ padding: 20 }}>
+          <Grid size={6}>
+            <TextField
+              label="Nick Name"
+              {...register("nick_name", { required: "Nick Name is required" })}
+              fullWidth
+              error={!!errors.nick_name}
+              helperText={errors.nick_name?.message}
+              disabled={!isEditing}
+            />
+          </Grid>
 
-      <Grid item xs={6}>
-        <TextField
-          label="Nick Name"
-          name="nick_name"
-          value={customerDetail.nick_name}
-          onChange={handleChange}
-          disabled={!isEditing}
-          fullWidth
-        />
-      </Grid>
+          <Grid size={6}>
+            <TextField
+              label="Full Name"
+              {...register("full_name")}
+              fullWidth
+              error={!!errors.full_name}
+              helperText={errors.full_name?.message}
+              disabled={!isEditing}
+            />
+          </Grid>
 
-      <Grid item xs={6}>
-        <TextField
-          label="Full Name"
-          name="full_name"
-          value={customerDetail.full_name}
-          onChange={handleChange}
-          disabled={!isEditing}
-          fullWidth
-        />
-      </Grid>
+          <Grid size={6}>
+            <FormControl fullWidth disabled={!isEditing}>
+              <InputLabel>Gender</InputLabel>
+              <Select
+                {...register("gender", { required: "Gender is required" })}
+                defaultValue={customerDetail.gender || ""}
+              >
+                <MenuItem value="Male">Male</MenuItem>
+                <MenuItem value="Female">Female</MenuItem>
+                <MenuItem value="No Info">No Info</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
 
-      <Grid item xs={6}>
-        <FormControl fullWidth disabled={!isEditing}>
-          <InputLabel>Gender</InputLabel>
-          <Select
-            name="gender"
-            value={customerDetail.gender}
-            onChange={handleChange}
-          >
-            <MenuItem value="Male">Male</MenuItem>
-            <MenuItem value="Female">Female</MenuItem>
-            <MenuItem value="No Info">No Info</MenuItem>
-          </Select>
-        </FormControl>
-      </Grid>
+          <Grid size={6}>
+            <TextField
+              label="Phone Number"
+              {...register("phone_number", {
+                required: "Phone Number is required",
+              })}
+              fullWidth
+              error={!!errors.phone_number}
+              helperText={errors.phone_number?.message}
+              disabled={!isEditing}
+            />
+          </Grid>
 
-      <Grid item xs={6}>
-        <TextField
-          label="Phone Number"
-          name="phone_number"
-          value={customerDetail.phone_number}
-          onChange={handleChange}
-          disabled={!isEditing}
-          fullWidth
-        />
-      </Grid>
+          <Grid size={6}>
+            <TextField
+              label="Address 1"
+              {...register("address_1", {
+                required: "Address 1 is required",
+              })}
+              fullWidth
+              error={!!errors.address_1}
+              helperText={errors.address_1?.message}
+              disabled={!isEditing}
+            />
+          </Grid>
 
-      <Grid item xs={6}>
-        <TextField
-          label="Address 1"
-          name="address_1"
-          value={customerDetail.address_1}
-          onChange={handleChange}
-          disabled={!isEditing}
-          fullWidth
-        />
-      </Grid>
+          <Grid size={6}>
+            <TextField
+              label="Address 2"
+              {...register("address_2")}
+              fullWidth
+              error={!!errors.address_2}
+              helperText={errors.address_2?.message}
+              disabled={!isEditing}
+            />
+          </Grid>
 
-      <Grid item xs={6}>
-        <TextField
-          label="Address 2"
-          name="address_2"
-          value={customerDetail.address_2}
-          onChange={handleChange}
-          disabled={!isEditing}
-          fullWidth
-        />
-      </Grid>
+          <Grid size={6}>
+            <TextField
+              label="Address 3"
+              {...register("address_3")}
+              fullWidth
+              error={!!errors.address_3}
+              helperText={errors.address_3?.message}
+              disabled={!isEditing}
+            />
+          </Grid>
 
-      <Grid item xs={6}>
-        <TextField
-          label="Address 3"
-          name="address_3"
-          value={customerDetail.address_3}
-          onChange={handleChange}
-          disabled={!isEditing}
-          fullWidth
-        />
-      </Grid>
+          <Grid size={6}>
+            <FormControl fullWidth disabled={!isEditing}>
+              <InputLabel>Status</InputLabel>
+              <Select
+                {...register("status", { required: "Status is required" })}
+                defaultValue={customerDetail.status || ""}
+              >
+                <MenuItem value="Active">Active</MenuItem>
+                <MenuItem value="Inactive">Inactive</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
 
-      <Grid item xs={6}>
-        <TextField
-          label="Special Food Note"
-          name="special_note"
-          value={customerDetail.special_note}
-          onChange={handleChange}
-          disabled={!isEditing}
-          fullWidth
-        />
-      </Grid>
-
-      <Grid item xs={6}>
-        <FormControl fullWidth disabled={!isEditing}>
-          <InputLabel>Status</InputLabel>
-          <Select
-            name="status"
-            value={customerDetail.status}
-            onChange={handleChange}
-          >
-            <MenuItem value="Active">Active</MenuItem>
-            <MenuItem value="Inactive">Inactive</MenuItem>
-          </Select>
-        </FormControl>
-      </Grid>
-
-      <Grid item xs={12}>
-        <Button variant="contained" color="primary" onClick={handleEditClick}>
-          {isEditing ? "Save" : "Edit"}
-        </Button>
-      </Grid>
-    </Grid>
+          <Grid size={12}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleEditClick}
+            >
+              {isEditing ? "Save" : "Edit"}
+            </Button>
+          </Grid>
+        </Grid>
+      </form>
+    </>
   );
 };
 

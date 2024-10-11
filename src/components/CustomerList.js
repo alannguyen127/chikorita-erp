@@ -52,6 +52,8 @@ const CustomerList = ({ items, addItem, listName, buttonName }) => {
     navigate(`/customer/${customerId}`);
   };
 
+  const searchColumns = ["nick_name", "full_name", "phone_number"];
+
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -71,7 +73,12 @@ const CustomerList = ({ items, addItem, listName, buttonName }) => {
       <div className="min-h-screen bg-gray-100 text-gray-900">
         <main className="mx-auto px-4 sm:px-6 lg:px-8 pt-4">
           <div className="mt-4 ">
-            <Table columns={columns} data={data} onRowClick={handleRowClick} />
+            <Table
+              columns={columns}
+              data={data}
+              onRowClick={handleRowClick}
+              searchColumns={searchColumns}
+            />
           </div>
         </main>
       </div>

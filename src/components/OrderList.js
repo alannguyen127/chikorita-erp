@@ -21,6 +21,10 @@ const OrderList = ({ items, addItem, listName, buttonName }) => {
         accessor: "customer_full_name",
       },
       {
+        Header: "Phone Number",
+        accessor: "phone_number",
+      },
+      {
         Header: "Order Date",
         accessor: "order_date",
       },
@@ -56,7 +60,7 @@ const OrderList = ({ items, addItem, listName, buttonName }) => {
   const handleRowClick = (orderId) => {
     navigate(`/order/${orderId}`);
   };
-
+  const searchColumns = ["customer_full_name", "phone_number"];
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -75,7 +79,12 @@ const OrderList = ({ items, addItem, listName, buttonName }) => {
       <div className="min-h-screen bg-gray-100 text-gray-900">
         <main className="mx-auto px-4 sm:px-6 lg:px-8 pt-4">
           <div className="mt-4 ">
-            <Table columns={columns} data={data} onRowClick={handleRowClick} />
+            <Table
+              columns={columns}
+              data={data}
+              onRowClick={handleRowClick}
+              searchColumns={searchColumns}
+            />
           </div>
         </main>
       </div>
