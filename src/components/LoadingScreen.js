@@ -5,7 +5,7 @@ function LoadingScreen() {
   return (
     <Box
       sx={{
-        position: "absolute",
+        position: "relative",
         width: "100%",
         height: "100%",
         display: "flex",

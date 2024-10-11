@@ -3,6 +3,7 @@ import React from "react";
 import { useFrappeGetCall } from "frappe-react-sdk";
 
 import MealPkgList from "../components/MealPkgList";
+import LoadingScreen from "../components/LoadingScreen";
 
 function MealPackagePage() {
   const { data, error, isLoading } = useFrappeGetCall(
@@ -11,7 +12,7 @@ function MealPackagePage() {
 
   const meals = data?.message.meals;
   if (isLoading) {
-    return <>Loading</>;
+    return <LoadingScreen />;
   }
   if (error) {
     return <>{JSON.stringify(error)}</>;

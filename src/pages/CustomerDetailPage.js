@@ -14,6 +14,7 @@ import { useFrappeGetCall, useFrappePutCall } from "frappe-react-sdk";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import LoadingScreen from "../components/LoadingScreen";
 
 // Validation schema using Yup
 const schema = yup.object().shape({
@@ -86,14 +87,37 @@ const CustomerDetailPage = () => {
   };
 
   if (isLoading) {
-    return <>Loading</>;
+    return <LoadingScreen />;
   }
   if (error) {
     return <>{JSON.stringify(error)}</>;
   }
   return (
     <>
-      <Typography variant="h5">Customer Details</Typography>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          padding: "0 20px",
+        }}
+      >
+        <Typography variant="h5">Customer Details</Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            if (isEditing) {
+              handleSubmit(onSubmit)();
+            } else {
+              handleEditClick();
+            }
+          }}
+          type={isEditing ? "button" : "submit"}
+        >
+          {isEditing ? "Save" : "Edit"}
+        </Button>
+      </div>
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={2} style={{ padding: 20 }}>
           <Grid size={6}>
@@ -127,7 +151,7 @@ const CustomerDetailPage = () => {
               >
                 <MenuItem value="Male">Male</MenuItem>
                 <MenuItem value="Female">Female</MenuItem>
-                <MenuItem value="No Info">No Info</MenuItem>
+                <MenuItem value="No info">No Info</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -147,7 +171,7 @@ const CustomerDetailPage = () => {
 
           <Grid size={6}>
             <TextField
-              label="Address 1"
+              label="Main Address"
               {...register("address_1", {
                 required: "Address 1 is required",
               })}
@@ -193,7 +217,7 @@ const CustomerDetailPage = () => {
             </FormControl>
           </Grid>
 
-          <Grid size={12}>
+          {/* <Grid size={12}>
             <Button
               variant="contained"
               color="primary"
@@ -208,7 +232,7 @@ const CustomerDetailPage = () => {
             >
               {isEditing ? "Save" : "Edit"}
             </Button>
-          </Grid>
+          </Grid> */}
         </Grid>
       </form>
     </>

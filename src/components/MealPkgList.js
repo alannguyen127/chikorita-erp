@@ -53,6 +53,8 @@ const MealPkgList = ({ items, addItem, listName, buttonName }) => {
   // Memoized data
   const data = React.useMemo(() => getData(), [items]);
 
+  const searchColumns = ["title", "short_title"];
+
   return (
     <div>
       <Typography variant="h5" gutterBottom>
@@ -62,7 +64,11 @@ const MealPkgList = ({ items, addItem, listName, buttonName }) => {
       <div className="min-h-screen bg-gray-100 text-gray-900">
         <main className="mx-auto px-4 sm:px-6 lg:px-8 pt-4">
           <div className="mt-4 ">
-            <Table columns={columns} data={data} />
+            <Table
+              columns={columns}
+              data={data}
+              searchColumns={searchColumns}
+            />
           </div>
         </main>
       </div>

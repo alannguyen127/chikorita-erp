@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import CustomerList from "../components/CustomerList";
 
 import { useFrappeGetCall } from "frappe-react-sdk";
+import LoadingScreen from "../components/LoadingScreen";
 // import { Curtains } from "@mui/icons-material";
 
 function CustomerPage() {
@@ -20,8 +21,9 @@ function CustomerPage() {
   };
 
   if (isLoading) {
-    return <>Loading</>;
+    return <LoadingScreen />;
   }
+
   if (error) {
     return <>{JSON.stringify(error)}</>;
   }

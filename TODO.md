@@ -13,7 +13,10 @@
 3. Dashboard:
    [X] Add date range in Dashboard Tab
    [ ] Link date range results to server to calculate charts
-   [ ] SQL for charts in Dashboard
+   [ ] SQL for charts in Dashboard:
+
+   - [ ] Gender Pie Charts
+   - [ ] Revenue Bar Charts
 
 4. User:
    [ ] Account setting Page

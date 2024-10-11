@@ -3,16 +3,35 @@ import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Box } from "@mui/material";
 
+import { useFrappeGetCall } from "frappe-react-sdk";
+import LoadingScreen from "../LoadingScreen";
 // Đăng ký các thành phần cần thiết
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const GenderPieChart = () => {
-  const data = {
+  const { data, error, isLoading } = useFrappeGetCall(
+    "emfresh_erp.em_fresh_erp.api.customer.customer.get_customer_gender_data",
+    {}
+  );
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+
+  const genderData = data?.message;
+
+  console.log("gender Data", genderData);
+
+  const chartData = {
     labels: ["Nam", "Nữ", "Không có thông tin"],
     datasets: [
       {
         label: "Giới tính khách hàng",
-        data: [450, 500, 50], // Số lượng khách hàng: Nam, Nữ và Không có thông tin
+        data: [
+          genderData.male_customers,
+          genderData.female_customers,
+          genderData.no_info_customers,
+        ], // Số lượng khách hàng: Nam, Nữ và Không có thông tin
         backgroundColor: [
           "rgba(54, 162, 235, 0.6)", // Màu cho "Nam"
           "rgba(255, 99, 132, 0.6)", // Màu cho "Nữ"
@@ -50,6 +69,10 @@ const GenderPieChart = () => {
     },
   };
 
+  if (error) {
+    return <>{JSON.stringify(error)}</>;
+  }
+
   return (
     <Box
       sx={{
@@ -70,7 +93,7 @@ const GenderPieChart = () => {
           height: "50%",
         }}
       >
-        <Pie data={data} options={options} />
+        <Pie data={chartData} options={options} />
       </Box>
     </Box>
   );

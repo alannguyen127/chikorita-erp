@@ -35,8 +35,6 @@ const schema = yup.object().shape({
 });
 
 const AddCustomerPage = () => {
-  // const [newCustomer, setNewCustomer] = useState({});
-
   const {
     handleSubmit,
     control,
@@ -79,9 +77,6 @@ const AddCustomerPage = () => {
           name="nick_name"
           control={control}
           defaultValue=""
-          // rules={{
-          //   required: "nick Name required",
-          // }}
           render={({ field }) => (
             <TextField
               {...field}
@@ -111,7 +106,6 @@ const AddCustomerPage = () => {
           )}
         />
 
-        {/* Phone Number Field */}
         <Controller
           name="phone_number"
           control={control}
@@ -130,6 +124,7 @@ const AddCustomerPage = () => {
             />
           )}
         />
+
         <Controller
           name="address_1"
           control={control}
@@ -146,7 +141,39 @@ const AddCustomerPage = () => {
             />
           )}
         />
-        {/* Gender Field */}
+        <Controller
+          name="address_2"
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Address 2"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              error={!!errors.address_2}
+              helperText={errors.address_2 ? errors.address_2.message : ""}
+            />
+          )}
+        />
+        <Controller
+          name="address_3"
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Address 3"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              error={!!errors.address_3}
+              helperText={errors.address_3 ? errors.address_3.message : ""}
+            />
+          )}
+        />
+
         <FormControl
           component="fieldset"
           margin="normal"
@@ -182,7 +209,6 @@ const AddCustomerPage = () => {
           )}
         </FormControl>
 
-        {/* Status Field */}
         <FormControl fullWidth margin="normal" error={!!errors.status}>
           <InputLabel>Status</InputLabel>
           <Controller
@@ -201,7 +227,6 @@ const AddCustomerPage = () => {
           )}
         </FormControl>
 
-        {/* Submit Button */}
         <Button
           type="submit"
           variant="contained"

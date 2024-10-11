@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useFrappeGetCall } from "frappe-react-sdk";
 
 import OrderList from "../components/OrderList";
+import LoadingScreen from "../components/LoadingScreen";
 
 function OrderPage() {
   const { data, error, isLoading } = useFrappeGetCall(
@@ -20,7 +21,7 @@ function OrderPage() {
     navigate("/order/add_order");
   };
   if (isLoading) {
-    return <>Loading</>;
+    return <LoadingScreen />;
   }
   if (error) {
     return <>{JSON.stringify(error)}</>;

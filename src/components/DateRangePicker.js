@@ -38,9 +38,9 @@ export default function MyDateRangePicker() {
           onChange={(newDate) => handleDateChange(startDate, newDate)}
           renderInput={(params) => <TextField {...params} />}
         />
-        <Typography variant="h6" sx={{ mt: 2 }}>
+        {/* <Typography variant="h6" sx={{ mt: 2 }}>
           Total Days: {totalDays}
-        </Typography>
+        </Typography> */}
       </Box>
     </LocalizationProvider>
   );
