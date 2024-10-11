@@ -78,10 +78,8 @@ const CustomerDetailPage = () => {
         ...data,
       });
       console.log("Customer updated status:", response);
-
-      // setIsEditing(false);
-
       alert("Customer updated successfully");
+      setIsEditing(false);
     } catch (error) {
       console.error("Error updating customer:", error);
     }
