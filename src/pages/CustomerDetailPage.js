@@ -10,7 +10,7 @@ import {
   InputLabel,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import { useFrappeGetCall } from "frappe-react-sdk";
+import { useFrappeGetCall, useFrappePutCall } from "frappe-react-sdk";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -43,6 +43,15 @@ const CustomerDetailPage = () => {
     { customer_id: customerId.customerId }
   );
 
+  const {
+    call: updateCustomer,
+    loading,
+    isCompleted,
+    reset: FPreset,
+  } = useFrappePutCall(
+    "emfresh_erp.em_fresh_erp.api.customer.customer.update_customer"
+  );
+
   const customerDetail = data?.message.customer_detail;
   // console.log("Detail Data from server", customerDetail);
 
@@ -62,8 +71,20 @@ const CustomerDetailPage = () => {
     reset(customerDetail);
   }, [JSON.stringify(customerDetail), reset]);
 
-  const onSubmit = (data) => {
-    console.log("Updated data: ", data);
+  const onSubmit = async (data) => {
+    try {
+      const response = await updateCustomer({
+        customer_id: customerId.customerId,
+        ...data,
+      });
+      console.log("Customer updated status:", response);
+
+      // setIsEditing(false);
+
+      alert("Customer updated successfully");
+    } catch (error) {
+      console.error("Error updating customer:", error);
+    }
   };
 
   if (isLoading) {
@@ -178,7 +199,14 @@ const CustomerDetailPage = () => {
             <Button
               variant="contained"
               color="primary"
-              onClick={handleEditClick}
+              onClick={() => {
+                if (isEditing) {
+                  handleSubmit(onSubmit)();
+                } else {
+                  handleEditClick();
+                }
+              }}
+              type={isEditing ? "button" : "submit"}
             >
               {isEditing ? "Save" : "Edit"}
             </Button>
