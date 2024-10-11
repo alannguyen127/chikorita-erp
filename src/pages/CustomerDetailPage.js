@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -10,7 +10,11 @@ import {
   InputLabel,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import { useFrappeGetCall, useFrappePutCall } from "frappe-react-sdk";
+import {
+  useFrappeGetCall,
+  useFrappePutCall,
+  useFrappeDeleteCall,
+} from "frappe-react-sdk";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -32,6 +36,7 @@ const schema = yup.object().shape({
 });
 
 const CustomerDetailPage = () => {
+  const navigate = useNavigate();
   const customerId = useParams();
   // if (customerId) {
   //   console.log("Param: ", customerId);
@@ -45,12 +50,11 @@ const CustomerDetailPage = () => {
   );
 
   const {
-    call: updateCustomer,
-    loading,
-    isCompleted,
-    reset: FPreset,
-  } = useFrappePutCall(
-    "emfresh_erp.em_fresh_erp.api.customer.customer.update_customer"
+    call: deleteCustomer,
+    isLoading: isDeleting,
+    error: deleteError,
+  } = useFrappeDeleteCall(
+    "emfresh_erp.em_fresh_erp.api.customer.customer.delete_customer"
   );
 
   const customerDetail = data?.message.customer_detail;
@@ -60,6 +64,30 @@ const CustomerDetailPage = () => {
     setIsEditing(!isEditing);
   };
 
+  const handleDeleteClick = async () => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this customer?"
+    );
+    if (confirmed) {
+      try {
+        const response = await deleteCustomer({
+          customer_id: customerId.customerId,
+        });
+        // console.log("Delele customer status:", response.message.status);
+        if (response.message.status === "success") {
+          alert(response.message.message);
+          navigate("/customer");
+        }
+      } catch (error) {
+        console.error("Delete failed", error);
+        alert("Failed to delete customer.");
+      }
+    }
+  };
+
+  const { call: updateCustomer } = useFrappePutCall(
+    "emfresh_erp.em_fresh_erp.api.customer.customer.update_customer"
+  );
   const {
     register,
     handleSubmit,
@@ -79,10 +107,13 @@ const CustomerDetailPage = () => {
         ...data,
       });
       console.log("Customer updated status:", response);
-      alert("Customer updated successfully");
-      setIsEditing(false);
+      if (response.message.status === "success") {
+        alert(response.message.message);
+        setIsEditing(false);
+      }
     } catch (error) {
       console.error("Error updating customer:", error);
+      alert("Failed to delete customer.");
     }
   };
 
@@ -102,20 +133,31 @@ const CustomerDetailPage = () => {
         }}
       >
         <Typography variant="h5">Customer Details</Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            if (isEditing) {
-              handleSubmit(onSubmit)();
-            } else {
-              handleEditClick();
-            }
-          }}
-          type={isEditing ? "button" : "submit"}
-        >
-          {isEditing ? "Save" : "Edit"}
-        </Button>
+        <div>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              if (isEditing) {
+                handleSubmit(onSubmit)();
+              } else {
+                handleEditClick();
+              }
+            }}
+            type={isEditing ? "button" : "submit"}
+            sx={{ margin: "0 15px" }}
+          >
+            {isEditing ? "Save" : "Edit"}
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            disabled={isDeleting || isEditing === true}
+            onClick={handleDeleteClick}
+          >
+            Delete
+          </Button>
+        </div>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
