@@ -1,22 +1,26 @@
 ### Todo
 
 1. Customer:
-   [ ] Detail Customer Page, allow edit Customer Infomation
    [X] Form Add Customer
-   [ ] Icon Delete Customer (only show with Admin)
+   [X] Detail Customer Page
+   [X] Edit Customer Infomation
+   [X] Delete Customer
 
 2. Order:
    [X] Call API get Order List
    [ ] Form Add Order
-   [ ] Detail Order Page, allow edit Order Detail
+   [ ] Detail Order Page
+   [ ] Edit Order
+   [ ] Delete Order
 
 3. Dashboard:
    [X] Add date range in Dashboard Tab
-   [ ] Link date range results to server to calculate charts
+   [X] Link date range results to server to calculate charts
    [ ] SQL for charts in Dashboard:
 
-   - [ ] Gender Pie Charts
-   - [ ] Revenue Bar Charts
+   - [x] Gender Pie Charts
+   - [x] Daily Revenue Bar Charts
+   - [ ] Revenue from new and current customer Line Chart
 
 4. User:
    [ ] Account setting Page
@@ -25,7 +29,7 @@
 5. Meal Package:
 
    [X] Call API get Meal Package List
-   [ ] Detail Meal Package Page, allow edit Meal Package Information
 
 6. Permission:
    [ ] Edit view for staff
+   [ ] Delete Customer button show only with Admin

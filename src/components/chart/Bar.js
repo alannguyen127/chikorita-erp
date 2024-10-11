@@ -11,9 +11,7 @@ import {
 } from "chart.js";
 import { Box } from "@mui/material";
 import { fCurrency } from "../../utils/numberFormat";
-import { fDate } from "../../utils/formatTime";
 import { useFrappeGetCall } from "frappe-react-sdk";
-import LoadingScreen from "../LoadingScreen";
 
 ChartJS.register(
   CategoryScale,
@@ -23,31 +21,27 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-// [fDate(new Date())]
-const RevenueBarChart = ({ dateRange, startDate, endDate }) => {
-  // console.log("RevenueBarChart", dateRange, dateRange.length);
-  console.log(startDate, endDate);
 
-  const { data, error, isLoading } = useFrappeGetCall(
+const RevenueBarChart = ({ dateRange, startDate, endDate }) => {
+  const { data } = useFrappeGetCall(
     "emfresh_erp.em_fresh_erp.api.order.order.get_sales_data_by_date",
     { start_date: startDate, end_date: endDate }
   );
-  if (isLoading) {
-    return <LoadingScreen />;
-  }
-  const salesData = data?.message.sales_data;
-  console.log("sale data", salesData);
 
-  // if (error) {
-  //   return <p>{error}</p>;
-  // }
+  // console.log("sale data", salesData);
+  const salesData = data?.message.sales_data || [];
+
+  const totalSalesPerDay = dateRange.map((date) => {
+    const salesOnDate = salesData.find((sale) => sale.order_date === date);
+    return salesOnDate ? salesOnDate.total_sales : 0;
+  });
 
   const revenueData = {
     labels: dateRange.length > 0 ? dateRange : [],
     datasets: [
       {
         label: "Doanh thu",
-        data: salesData ? salesData.map((sale) => sale.total_sales) : [],
+        data: totalSalesPerDay,
         backgroundColor: "rgba(75, 192, 192, 0.6)",
         borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 1,

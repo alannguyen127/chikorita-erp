@@ -23,8 +23,15 @@ export default function MyDateRangePicker({ onChange }) {
   const formatEndDate = endDate ? fDate(endDate) : null;
 
   const handleViewClick = () => {
+    const today = new Date();
     if (endDate && startDate && endDate < startDate) {
       setError("End Date cannot be before Start Date.");
+
+      return;
+    }
+    if (endDate && endDate > today.setHours(0, 0, 0, 0)) {
+      setError("End Date cannot be after today");
+
       return;
     }
     if (onChange && formatStartDate && formatEndDate) {
@@ -57,11 +64,7 @@ export default function MyDateRangePicker({ onChange }) {
           </Button>
         </Box>
       </Box>
-      {error && (
-        <Typography color="error" sx={{ mb: 2 }}>
-          {error}
-        </Typography>
-      )}
+      {error && <Typography color="error">{error}</Typography>}
     </LocalizationProvider>
   );
 }
