@@ -48,6 +48,7 @@ const OrderDetailPage = () => {
   );
 
   const orderDetail = data?.message?.order_detail;
+
   // const orderMealPackage = orderDetail?.order_meal_package;
 
   console.log(orderDetail);
@@ -212,22 +213,22 @@ const OrderDetailPage = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* Customer Name Field */}
         <TextField
-          label="Customer Full Name"
-          {...register("customer_full_name")}
+          label="Customer Name"
+          {...register("customer_nick_name")}
           fullWidth
-          error={!!errors.customer_full_name}
-          helperText={errors.customer_full_name?.message}
+          error={!!errors.customer_nick_name}
+          helperText={errors.customer_nick_name?.message}
           disabled
         />
         <Controller
-          name="customer_nick_name"
+          name="customer_full_name"
           control={control}
           disabled
           defaultValue=""
           render={({ field }) => (
             <TextField
               {...field}
-              label="Customer ID"
+              label="Customer Full Name"
               fullWidth
               margin="normal"
             />

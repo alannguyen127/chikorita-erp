@@ -18,7 +18,7 @@ const OrderList = ({ items, addItem, listName, buttonName }) => {
       // },
       {
         Header: "Customer Name",
-        accessor: "customer_full_name",
+        accessor: "customer_nick_name",
       },
       {
         Header: "Phone Number",

@@ -9,7 +9,6 @@ export default function MyDateRangePicker({ onChange }) {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [error, setError] = useState("");
-  // const [totalDays, setTotalDays] = useState(0);
 
   const handleDateChange = (newStartDate, newEndDate) => {
     setStartDate(newStartDate);
@@ -42,12 +41,12 @@ export default function MyDateRangePicker({ onChange }) {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <Box display="flex" sx={{ paddingLeft: "30px" }}>
+      <Box display="flex">
         <DatePicker
           label="Start Date"
           value={startDate}
           onChange={(newDate) => handleDateChange(newDate, endDate)}
-          renderInput={(params) => <TextField {...params} />}
+          slotProps={{ textField: { variant: "outlined" } }}
           format="dd/MM/yyyy"
         />
         <Box sx={{ mx: 2, mt: 2 }}> - </Box>
@@ -55,7 +54,7 @@ export default function MyDateRangePicker({ onChange }) {
           label="End Date"
           value={endDate}
           onChange={(newDate) => handleDateChange(startDate, newDate)}
-          renderInput={(params) => <TextField {...params} />}
+          slotProps={{ textField: { variant: "outlined" } }}
           format="dd/MM/yyyy"
         />
         <Box sx={{ mx: 2, mt: 2 }}>
@@ -68,10 +67,3 @@ export default function MyDateRangePicker({ onChange }) {
     </LocalizationProvider>
   );
 }
-
-// if (newStartDate && newEndDate) {
-//   const diffDays = dayjs(newEndDate).diff(dayjs(newStartDate), "day");
-//   setTotalDays(diffDays);
-// } else {
-//   setTotalDays(0); // Nếu không chọn đủ cả 2 ngày thì reset lại tổng số ngày
-// }

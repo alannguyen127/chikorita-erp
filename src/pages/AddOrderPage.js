@@ -130,10 +130,18 @@ const AddOrderPage = () => {
   );
 
   const onSubmit = async (data) => {
+    const selectedDate = new Date(data.orderDate);
+    const currentDate = new Date();
+    selectedDate.setHours(currentDate.getHours());
+    selectedDate.setMinutes(currentDate.getMinutes());
+    selectedDate.setSeconds(currentDate.getSeconds());
+    // Lấy chênh lệch múi giờ hiện tại (GMT+7 là +420 phút)
+    const timezoneOffset = selectedDate.getTimezoneOffset() * 60000; // Chuyển đổi phút thành milliseconds
+    const localDate = new Date(selectedDate.getTime() - timezoneOffset);
     const payload = {
       customerName: data.customerId,
       orderDate: data.orderDate
-        ? new Date(data.orderDate).toISOString().replace("T", " ").split(".")[0]
+        ? localDate.toISOString().replace("T", " ").split(".")[0]
         : "",
       deliveryAddress: data.deliveryAddress,
       orderStatus: data.orderStatus,

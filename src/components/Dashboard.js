@@ -41,7 +41,7 @@ const Dashboard = ({ startDate, endDate }) => {
   );
 
   const revenue = revenueData?.message;
-  console.log(revenue);
+  // console.log(revenue);
 
   const {
     data: statusData,
@@ -92,10 +92,10 @@ const Dashboard = ({ startDate, endDate }) => {
                   {customerStatusData.total_customers}
                 </Typography>
                 <Typography color="textSecondary">Trong đó:</Typography>
-                <Typography color="textSecondary">
+                <Typography color="success">
                   - Active: {customerStatusData.total_active_customers}
                 </Typography>
-                <Typography color="textSecondary">
+                <Typography color="warning">
                   - Inactive: {customerStatusData.total_inactive_customers}
                 </Typography>
               </Grid>
@@ -126,13 +126,13 @@ const Dashboard = ({ startDate, endDate }) => {
                   {totalOrder ? totalOrder.total_orders : 0}
                 </Typography>
                 <Typography color="textSecondary">Trong đó:</Typography>
-                <Typography color="textSecondary">
+                <Typography color="warning">
                   - Thanh toán COD: {totalOrder ? totalOrder.cod_orders : 0}
                 </Typography>
-                <Typography color="textSecondary">
+                <Typography color="success">
                   - Đã thanh toán: {totalOrder ? totalOrder.paid_orders : 0}
                 </Typography>
-                <Typography color="textSecondary">
+                <Typography color="error">
                   - Chưa thanh toán:{" "}
                   {totalOrder ? totalOrder.not_yet_orders : 0}
                 </Typography>

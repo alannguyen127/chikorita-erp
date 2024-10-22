@@ -16,6 +16,7 @@ import {
 import { Button, PageButton } from "../utils/Button";
 import { SortDownIcon, SortUpIcon, SortIcon } from "../utils/Icons";
 import classNames from "classnames";
+import { fCurrency } from "../utils/numberFormat";
 
 // GlobalFilter Component
 function GlobalFilter({
@@ -217,13 +218,40 @@ function Table({ columns, data, onRowClick, searchColumns }) {
                         }}
                         className="cursor-pointer hover:bg-gray-100" // Hiển thị hiệu ứng khi hover
                       >
+                        {/* Change color by cell value */}
                         {row.cells.map((cell) => {
+                          const isPaymentStatusColumn =
+                            cell.column.Header === "Payment Status";
+                          const paymentStatusBackground =
+                            cell.value === "Paid"
+                              ? "text-green-500"
+                              : cell.value === "Not yet"
+                              ? "text-red-500"
+                              : cell.value === "COD"
+                              ? "text-yellow-300"
+                              : "text-black";
+
+                          const isTotalAmountColumn =
+                            cell.column.Header === "Total Amount";
+
+                          const isUnitPriceColumn =
+                            cell.column.Header === "Unit Price";
+
+                          const formattedValue =
+                            isTotalAmountColumn || isUnitPriceColumn
+                              ? fCurrency(cell.value)
+                              : cell.render("Cell");
+
                           return (
                             <td
                               {...cell.getCellProps()}
-                              className="px-6 py-4 whitespace-nowrap"
+                              className={`px-6 py-4 whitespace-nowrap ${
+                                isPaymentStatusColumn
+                                  ? paymentStatusBackground
+                                  : ""
+                              }`}
                             >
-                              {cell.render("Cell")}
+                              {formattedValue}
                             </td>
                           );
                         })}

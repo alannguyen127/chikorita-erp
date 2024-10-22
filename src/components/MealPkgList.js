@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Typography } from "@mui/material";
 import Table, { SelectColumnFilter, StatusPill } from "./Table";
 
-const MealPkgList = ({ items, addItem, listName, buttonName }) => {
+const MealPkgList = ({ items, addItem, listName, buttonName, onRowClick }) => {
   // Function to return the items
   const getData = () => items;
 
@@ -68,6 +68,7 @@ const MealPkgList = ({ items, addItem, listName, buttonName }) => {
               columns={columns}
               data={data}
               searchColumns={searchColumns}
+              onRowClick={onRowClick}
             />
           </div>
         </main>
