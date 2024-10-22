@@ -80,7 +80,7 @@ const GenderPieChart = () => {
         borderRadius: "15px",
         padding: "20px",
         boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-        width: "90%",
+        width: "100%",
         margin: "auto",
         marginTop: "20px",
         display: "flex",

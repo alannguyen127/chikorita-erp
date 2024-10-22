@@ -40,13 +40,13 @@ function DashboadPage() {
   return (
     <Stack>
       <MyDateRangePicker onChange={handleChangeDateRange} />
-      <Dashboard />
+      <Dashboard startDate={startDate} endDate={endDate} />
 
       <Grid container spacing={2}>
-        <Grid size={6}>
+        {/* <Grid size={6}>
           <LineGraph />
-        </Grid>
-        <Grid size={6}>
+        </Grid> */}
+        <Grid size={12}>
           <RevenueBarChart
             dateRange={dateRange}
             startDate={startDate}
