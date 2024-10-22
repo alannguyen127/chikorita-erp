@@ -65,11 +65,11 @@ function MainHeader() {
 
       <MenuItem
         onClick={handleMenuClose}
-        to="/account"
+        to="/change_password"
         component={RouterLink}
         sx={{ mx: 1 }}
       >
-        Account Settings
+        Change Password
       </MenuItem>
 
       <MenuItem
@@ -91,7 +91,7 @@ function MainHeader() {
 
   return (
     // <Box sx={{ mb: 3, flexGrow: 1 }}>
-    <AppBar position="fixed" color="success" sx={{ zIndex: "9999" }}>
+    <AppBar position="fixed" color="info" sx={{ zIndex: "9999" }}>
       <Toolbar>
         <IconButton
           size="large"

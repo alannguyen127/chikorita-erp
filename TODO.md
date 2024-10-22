@@ -23,7 +23,7 @@
    - [ ] Revenue from new and current customer Line Chart
 
 4. User:
-   [ ] Account setting Page
+   [X] Change Password
    [ ] API Post when create new account
 
 5. Meal Package:

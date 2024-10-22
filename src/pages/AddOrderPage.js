@@ -19,19 +19,18 @@ import {
   Paper,
   Container,
   Typography,
+  Autocomplete,
 } from "@mui/material";
-import { customers } from "../test_data/customers";
-
-import { mealPackages } from "../test_data/meal_package";
-
 import { fCurrency } from "../utils/numberFormat";
+import { useFrappeGetCall, useFrappePostCall } from "frappe-react-sdk";
+import { useNavigate } from "react-router-dom";
 
-// Validation schema
 const schema = yup.object().shape({
   customerName: yup.string().required("Customer is required"),
   orderDate: yup.date().required("Order date is required"),
   deliveryAddress: yup.string().required("Delivery address is required"),
   paymentStatus: yup.string().required("Payment status is required"),
+  orderStatus: yup.string().required("Order status is required"),
   shippingFee: yup.number().required("Shipping fee is required"),
   orderNote: yup.string(),
   shippingNote: yup.string(),
@@ -47,7 +46,7 @@ const AddOrderPage = () => {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      orderMeals: [{ package: "", quantity: 1, unitPrice: 0, price: 0 }],
+      orderMeals: [{ package: "", quantity: 0, unitPrice: 0, price: 0 }],
     },
   });
 
@@ -57,16 +56,64 @@ const AddOrderPage = () => {
   });
 
   const [customerAddresses, setCustomerAddresses] = useState([]);
+  const [customerId, setCustomerId] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const selectedCustomer = watch("customerName");
   const orderMeals = watch("orderMeals");
   const shippingFee = watch("shippingFee", 0);
+  const navigate = useNavigate();
+
+  // Call to get customers from EFE Customer Doctype
+  const { data: customers, error: customerError } = useFrappeGetCall(
+    "emfresh_erp.em_fresh_erp.api.customer.customer.get_customers"
+  );
+
+  // console.log(customers);
+  const customersData = customers?.message.customers;
+
+  // Call to get meal packages from EFE Meal Package Doctype
+  const { data: mealPackagesData, error: mealPackageError } = useFrappeGetCall(
+    "emfresh_erp.em_fresh_erp.api.meal_package.meal_package.get_meals"
+  );
+  const meals = mealPackagesData?.message.meals;
+  // console.log(meals);
 
   useEffect(() => {
     // Update delivery address list when customer is selected
-    const customer = customers.find((c) => c.name === selectedCustomer);
-    setCustomerAddresses(customer ? customer.addresses : []);
-    setValue("deliveryAddress", ""); // Clear address when customer changes
-  }, [selectedCustomer, setValue]);
+    if (customersData && selectedCustomer) {
+      const customer = customersData.find(
+        (c) => c.nick_name === selectedCustomer
+      );
+      if (customer) {
+        setCustomerId(customer.name);
+        setPhoneNumber(customer.phone_number);
+        setValue("customerId", customerId);
+        setValue("phoneNumber", phoneNumber);
+        setCustomerAddresses(
+          customer
+            ? [
+                customer.address_1,
+                customer.address_2,
+                customer.address_3,
+              ].filter((address) => address !== null)
+            : []
+        );
+      } else {
+        setCustomerId("");
+        setPhoneNumber("");
+        setCustomerAddresses([]);
+      }
+
+      setValue("deliveryAddress", ""); // Clear address when customer changes
+    }
+  }, [
+    selectedCustomer,
+    setValue,
+    customersData,
+    customers,
+    customerId,
+    phoneNumber,
+  ]);
 
   // Calculate total amount
   const calculateTotalAmount = () => {
@@ -74,15 +121,56 @@ const AddOrderPage = () => {
     return orderTotal + Number(shippingFee);
   };
 
-  const onSubmit = (data) => {
-    console.log(data);
-    // Handle form submission
+  const {
+    call,
+    loading: creatingOrder,
+    error: createOrderError,
+  } = useFrappePostCall(
+    "emfresh_erp.em_fresh_erp.api.order.order.create_order"
+  );
+
+  const onSubmit = async (data) => {
+    const payload = {
+      customerName: data.customerId,
+      orderDate: data.orderDate
+        ? new Date(data.orderDate).toISOString().replace("T", " ").split(".")[0]
+        : "",
+      deliveryAddress: data.deliveryAddress,
+      orderStatus: data.orderStatus,
+      paymentStatus: data.paymentStatus,
+      shippingFee: data.shippingFee,
+      orderNote: data.orderNote,
+      shippingNote: data.shippingNote,
+      orderMeals: data.orderMeals.map((meal) => ({
+        package: meal.name,
+        packageId: meal.id,
+        quantity: meal.quantity,
+      })),
+    };
+    console.log(payload);
+    try {
+      const response = await call({ data: payload });
+      if (response.message.status === "success") {
+        console.log("Create order successfully!");
+        alert("Create order successfully!");
+        navigate("/order");
+      } else {
+        console.log(
+          "Status: ",
+          response.message.status,
+          ":",
+          response.message.message
+        );
+      }
+    } catch (err) {
+      console.error("Error creating order", err);
+    }
   };
 
   return (
     <Container>
       <Typography variant="h5" align="center">
-        Add New Order
+        New Order
       </Typography>
 
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -92,20 +180,79 @@ const AddOrderPage = () => {
           <Controller
             name="customerName"
             control={control}
+            defaultValue=""
             render={({ field }) => (
               <Select {...field}>
-                {customers.map((customer) => (
-                  <MenuItem key={customer.id} value={customer.name}>
-                    {customer.name}
-                  </MenuItem>
-                ))}
+                {customersData &&
+                  customersData.map((customer) => (
+                    <MenuItem key={customer.id} value={customer.nick_name}>
+                      {customer.nick_name}
+                    </MenuItem>
+                  ))}
               </Select>
             )}
           />
+          {/* <Controller
+            name="customerName"
+            control={control}
+            render={({ field }) => (
+              <Autocomplete
+                {...field}
+                freeSolo
+                options={
+                  customersData
+                    ? customersData.map((customer) => customer.nick_name)
+                    : []
+                }
+                onInputChange={(event, value) => {
+                  field.onChange(value);
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Customer Name"
+                    fullWidth
+                    error={!!errors.customerName}
+                    helperText={
+                      errors.customerName ? errors.customerName.message : ""
+                    }
+                  />
+                )}
+              />
+            )}
+          /> */}
           {errors.customerName && (
             <FormHelperText>{errors.customerName.message}</FormHelperText>
           )}
         </FormControl>
+        <Controller
+          name="customerId"
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Customer ID"
+              fullWidth
+              margin="normal"
+              disabled
+            />
+          )}
+        />
+        <Controller
+          name="phoneNumber"
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Phone Number"
+              fullWidth
+              margin="normal"
+              disabled
+            />
+          )}
+        />
 
         {/* Delivery Address */}
         <FormControl fullWidth margin="normal" error={!!errors.deliveryAddress}>
@@ -113,6 +260,7 @@ const AddOrderPage = () => {
           <Controller
             name="deliveryAddress"
             control={control}
+            defaultValue=""
             render={({ field }) => (
               <Select {...field} disabled={!customerAddresses.length}>
                 {customerAddresses.map((address, index) => (
@@ -138,8 +286,9 @@ const AddOrderPage = () => {
               {...field}
               label="Order Date"
               type="date"
-              InputLabelProps={{ shrink: true }}
+              // slotProps={{ input: { shrink: true } }}
               fullWidth
+              focused
               margin="normal"
               error={!!errors.orderDate}
               helperText={errors.orderDate ? errors.orderDate.message : ""}
@@ -147,12 +296,33 @@ const AddOrderPage = () => {
           )}
         />
 
+        <FormControl fullWidth margin="normal" error={!!errors.orderStatus}>
+          <InputLabel>Order Status</InputLabel>
+          <Controller
+            name="orderStatus"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <Select {...field}>
+                <MenuItem value="Ordered">Ordered</MenuItem>
+                <MenuItem value="Postpone">Postpone</MenuItem>
+                <MenuItem value="Success">Success</MenuItem>
+                <MenuItem value="Cancel">Cancel</MenuItem>
+              </Select>
+            )}
+          />
+          {errors.paymentStatus && (
+            <FormHelperText>{errors.paymentStatus.message}</FormHelperText>
+          )}
+        </FormControl>
+
         {/* Payment Status */}
         <FormControl fullWidth margin="normal" error={!!errors.paymentStatus}>
           <InputLabel>Payment Status</InputLabel>
           <Controller
             name="paymentStatus"
             control={control}
+            defaultValue=""
             render={({ field }) => (
               <Select {...field}>
                 <MenuItem value="Paid">Paid</MenuItem>
@@ -167,38 +337,96 @@ const AddOrderPage = () => {
         </FormControl>
 
         {/* Order Meal Package Table */}
-        <TableContainer component={Paper}>
+        <TableContainer
+          component={Paper}
+          sx={{
+            m: "18px 0",
+            borderRadius: "8px",
+            // boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
+          }}
+        >
           <Table>
             <TableHead>
-              <TableRow>
-                <TableCell>Package</TableCell>
-                <TableCell>Quantity</TableCell>
-                <TableCell>Unit Price</TableCell>
-                <TableCell>Price</TableCell>
+              <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
+                <TableCell
+                  sx={{
+                    fontSize: "18px",
+                    fontWeight: "bold",
+                    textAlign: "center",
+                    padding: "16px",
+                  }}
+                >
+                  Package
+                </TableCell>
+                <TableCell
+                  sx={{
+                    fontSize: "18px",
+                    fontWeight: "bold",
+                    textAlign: "center",
+                    padding: "16px",
+                  }}
+                >
+                  Quantity
+                </TableCell>
+                <TableCell
+                  sx={{
+                    fontSize: "18px",
+                    fontWeight: "bold",
+                    textAlign: "center",
+                    padding: "16px",
+                  }}
+                >
+                  Unit Price
+                </TableCell>
+                <TableCell
+                  sx={{
+                    fontSize: "18px",
+                    fontWeight: "bold",
+                    textAlign: "center",
+                    padding: "16px",
+                  }}
+                >
+                  Price
+                </TableCell>
                 <TableCell />
               </TableRow>
             </TableHead>
             <TableBody>
               {fields.map((item, index) => (
-                <TableRow key={item.id}>
-                  <TableCell>
+                <TableRow
+                  key={item.id}
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: "#f0f0f0",
+                    },
+                  }}
+                >
+                  <TableCell sx={{ padding: "12px" }}>
                     <Controller
-                      name={`orderMeals[${index}].package`}
+                      name={`orderMeals[${index}].name`}
                       control={control}
+                      defaultValue=""
                       render={({ field }) => (
                         <Select
                           {...field}
+                          fullWidth
                           onChange={(e) => {
-                            const selectedPackage = mealPackages.find(
-                              (p) => p.name === e.target.value
+                            const selectedPackage = meals.find(
+                              (p) => p.title === e.target.value
+                            );
+
+                            setValue(
+                              `orderMeals[${index}].name`,
+                              selectedPackage.title
                             );
                             setValue(
-                              `orderMeals[${index}].package`,
+                              `orderMeals[${index}].id`,
                               selectedPackage.name
                             );
+
                             setValue(
                               `orderMeals[${index}].unitPrice`,
-                              selectedPackage.unitPrice
+                              selectedPackage.unit_price
                             );
                             const quantity = watch(
                               `orderMeals[${index}].quantity`,
@@ -210,42 +438,47 @@ const AddOrderPage = () => {
                             );
                           }}
                         >
-                          {mealPackages.map((pkg) => (
-                            <MenuItem key={pkg.id} value={pkg.name}>
-                              {pkg.name}
-                            </MenuItem>
-                          ))}
+                          {meals &&
+                            meals.map((pkg) => (
+                              <MenuItem key={pkg.id} value={pkg.title}>
+                                {pkg.title}
+                              </MenuItem>
+                            ))}
                         </Select>
                       )}
                     />
                   </TableCell>
-                  <TableCell>
+                  <TableCell sx={{ padding: "12px" }}>
                     <Controller
                       name={`orderMeals[${index}].quantity`}
                       control={control}
-                      defaultValue={1}
                       render={({ field }) => (
                         <TextField
                           {...field}
                           type="number"
                           fullWidth
                           onChange={(e) => {
-                            const quantity = e.target.value;
-                            const unitPrice = watch(
-                              `orderMeals[${index}].unitPrice`,
-                              0
-                            );
-                            setValue(`orderMeals[${index}].quantity`, quantity);
-                            setValue(
-                              `orderMeals[${index}].price`,
-                              quantity * unitPrice
-                            );
+                            const quantity = parseInt(e.target.value);
+                            if (quantity >= 0) {
+                              const unitPrice = watch(
+                                `orderMeals[${index}].unitPrice`,
+                                0
+                              );
+                              setValue(
+                                `orderMeals[${index}].quantity`,
+                                quantity
+                              );
+                              setValue(
+                                `orderMeals[${index}].price`,
+                                quantity * unitPrice
+                              );
+                            }
                           }}
                         />
                       )}
                     />
                   </TableCell>
-                  <TableCell>
+                  <TableCell sx={{ padding: "12px" }}>
                     <Controller
                       name={`orderMeals[${index}].unitPrice`}
                       control={control}
@@ -260,7 +493,7 @@ const AddOrderPage = () => {
                       )}
                     />
                   </TableCell>
-                  <TableCell>
+                  <TableCell sx={{ padding: "12px" }}>
                     <Controller
                       name={`orderMeals[${index}].price`}
                       control={control}
@@ -275,11 +508,13 @@ const AddOrderPage = () => {
                       )}
                     />
                   </TableCell>
-                  <TableCell>
+                  <TableCell sx={{ padding: "12px", textAlign: "center" }}>
                     <Button
                       onClick={() => remove(index)}
                       variant="outlined"
-                      color="secondary"
+                      color="error"
+                      size="small"
+                      sx={{ minWidth: "80px" }}
                     >
                       Remove
                     </Button>
@@ -288,14 +523,17 @@ const AddOrderPage = () => {
               ))}
             </TableBody>
           </Table>
+          <Button
+            sx={{ m: "13px" }}
+            variant="outlined"
+            color="info"
+            onClick={() =>
+              append({ package: "", quantity: 0, unitPrice: 0, price: 0 })
+            }
+          >
+            Add Package
+          </Button>
         </TableContainer>
-        <Button
-          onClick={() =>
-            append({ package: "", quantity: 1, unitPrice: 0, price: 0 })
-          }
-        >
-          Add Package
-        </Button>
 
         {/* Shipping Fee */}
         <Controller
@@ -355,10 +593,18 @@ const AddOrderPage = () => {
           )}
         />
 
-        <Button type="submit" variant="contained" color="primary">
-          Save
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={creatingOrder}
+        >
+          {creatingOrder ? "Submitting..." : "Save"}
         </Button>
       </form>
+      {createOrderError && (
+        <p style={{ color: "red" }}>Error: {createOrderError.message}</p>
+      )}
     </Container>
   );
 };

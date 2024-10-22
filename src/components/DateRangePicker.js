@@ -42,7 +42,7 @@ export default function MyDateRangePicker({ onChange }) {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <Box display="flex">
+      <Box display="flex" sx={{ paddingLeft: "30px" }}>
         <DatePicker
           label="Start Date"
           value={startDate}

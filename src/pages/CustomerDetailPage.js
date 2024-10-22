@@ -258,23 +258,6 @@ const CustomerDetailPage = () => {
               </Select>
             </FormControl>
           </Grid>
-
-          {/* <Grid size={12}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                if (isEditing) {
-                  handleSubmit(onSubmit)();
-                } else {
-                  handleEditClick();
-                }
-              }}
-              type={isEditing ? "button" : "submit"}
-            >
-              {isEditing ? "Save" : "Edit"}
-            </Button>
-          </Grid> */}
         </Grid>
       </form>
     </>

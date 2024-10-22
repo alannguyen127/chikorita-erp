@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import HomePage from "../pages/HomePage";
-import AccountPage from "../pages/AccountPage";
+
 import BlankLayout from "../layouts/BlankLayout";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
@@ -17,6 +17,7 @@ import AddCustomerPage from "../pages/AddCustomerPage";
 import AddOrderPage from "../pages/AddOrderPage";
 import AuthRequire from "./AuthRequire";
 import DashboadPage from "../pages/DashboadPage";
+import ChangePassword from "../pages/ChangePasswordPage";
 // import { useAuth } from "../context/AuthContext";
 
 function Router() {
@@ -36,7 +37,7 @@ function Router() {
         <Route path="customer" element={<CustomerPage />} />
         <Route path="order" element={<OrderPage />} />
         <Route path="meal_package" element={<MealPackagePage />} />
-        <Route path="account" element={<AccountPage />} />
+        <Route path="change_password" element={<ChangePassword />} />
 
         <Route path="customer/:customerId" element={<CustomerDetailPage />} />
         <Route path="customer/add_customer" element={<AddCustomerPage />} />

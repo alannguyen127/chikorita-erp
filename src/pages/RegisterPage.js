@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
-import { FormProvider, FTextField } from "../components/form";
-import { useForm } from "react-hook-form";
+import { FormProvider, FSelect, FTextField } from "../components/form";
+import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
@@ -11,6 +11,7 @@ import {
   IconButton,
   InputAdornment,
   Link,
+  MenuItem,
   Stack,
 } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -25,6 +26,7 @@ const RegisterSchema = Yup.object().shape({
   passwordConfirmation: Yup.string()
     .required("Please confirm your password")
     .oneOf([Yup.ref("password")], "Passwords must match"),
+  role: Yup.string().required("Role is required"),
 });
 
 const defaultValues = {
@@ -32,6 +34,7 @@ const defaultValues = {
   email: "",
   password: "",
   passwordConfirmation: "",
+  role: "",
 };
 
 function RegisterPage() {
@@ -47,6 +50,7 @@ function RegisterPage() {
 
   const {
     handleSubmit,
+    control,
     reset,
     setError,
     formState: { errors, isSubmitting },
@@ -73,10 +77,10 @@ function RegisterPage() {
           {!!errors.responseError && (
             <Alert severity="error">{errors.responseError.message}</Alert>
           )}
-          <Alert severity="info">
-            Already have an account?{" "}
-            <Link variant="subtitle2" component={RouterLink} to="/login">
-              Sign in
+          <Alert severity="success">
+            Go back to{" "}
+            <Link variant="subtitle2" component={RouterLink} to="/">
+              Homepage
             </Link>
           </Alert>
           <FTextField name="name" label="Full name" />
@@ -122,6 +126,10 @@ function RegisterPage() {
               ),
             }}
           />
+          <FSelect name="role" label="Role">
+            <MenuItem value="staff">Staff</MenuItem>
+            <MenuItem value="staff">Manager</MenuItem>
+          </FSelect>
           <LoadingButton
             fullWidth
             size="large"
@@ -129,7 +137,7 @@ function RegisterPage() {
             variant="contained"
             loading={isSubmitting}
           >
-            Register
+            Create
           </LoadingButton>
         </Stack>
       </FormProvider>

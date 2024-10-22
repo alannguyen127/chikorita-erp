@@ -12,8 +12,8 @@ function FSelect({ name, children, ...other }) {
         <TextField
           {...field}
           select
+          focused
           fullWidth
-          SelectProps={{ native: true }}
           error={!!error}
           helperText={error?.message}
           {...other}

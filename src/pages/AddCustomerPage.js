@@ -18,6 +18,8 @@ import {
   Container,
   Typography,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { getMaxLength } from "@testing-library/user-event/dist/cjs/utils/index.js";
 
 // Validation schema using Yup
 const schema = yup.object().shape({
@@ -28,7 +30,11 @@ const schema = yup.object().shape({
   phone_number: yup
     .string()
     .required("Phone number is required")
-    .matches(/^[0-9]+$/, "Phone number must be numeric"),
+    .matches(/^[0-9]+$/, "Phone number must be numeric")
+    .matches(
+      /^0[0-9]{9}$/,
+      "Phone number must start with 0 and be exactly 10 digits"
+    ),
   gender: yup.string().required("Gender is required"),
   status: yup.string().required("Status is required"),
   address_1: yup.string().required("Address is required"),
@@ -58,7 +64,8 @@ const AddCustomerPage = () => {
       console.log(response);
       if (response.message.status === "success") {
         alert("Customer created successfully");
-        reset();
+        // reset();
+        navigate("/customer");
       } else {
         alert(`Error: ${JSON.stringify(response.message)}`);
       }
@@ -66,6 +73,8 @@ const AddCustomerPage = () => {
       console.log(error);
     }
   };
+
+  const navigate = useNavigate();
 
   return (
     <Container>
@@ -115,6 +124,12 @@ const AddCustomerPage = () => {
               {...field}
               label="Phone Number"
               variant="outlined"
+              onChange={(e) => {
+                if (e.target.value.length <= 10) {
+                  field.onChange(e);
+                }
+              }}
+              // type="number"
               fullWidth
               margin="normal"
               error={!!errors.phone_number}
@@ -152,8 +167,8 @@ const AddCustomerPage = () => {
               variant="outlined"
               fullWidth
               margin="normal"
-              error={!!errors.address_2}
-              helperText={errors.address_2 ? errors.address_2.message : ""}
+              // error={!!errors.address_2}
+              // helperText={errors.address_2 ? errors.address_2.message : ""}
             />
           )}
         />
@@ -168,8 +183,8 @@ const AddCustomerPage = () => {
               variant="outlined"
               fullWidth
               margin="normal"
-              error={!!errors.address_3}
-              helperText={errors.address_3 ? errors.address_3.message : ""}
+              // error={!!errors.address_3}
+              // helperText={errors.address_3 ? errors.address_3.message : ""}
             />
           )}
         />

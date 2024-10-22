@@ -25,7 +25,13 @@ ChartJS.register(
 const RevenueBarChart = ({ dateRange, startDate, endDate }) => {
   const { data } = useFrappeGetCall(
     "emfresh_erp.em_fresh_erp.api.order.order.get_sales_data_by_date",
-    { start_date: startDate, end_date: endDate }
+    {
+      start_date: startDate,
+      end_date: endDate,
+    },
+    {
+      enabled: !!startDate && !!endDate,
+    }
   );
 
   // console.log("sale data", salesData);
@@ -65,7 +71,7 @@ const RevenueBarChart = ({ dateRange, startDate, endDate }) => {
         beginAtZero: true,
         ticks: {
           callback: function (value) {
-            return fCurrency(value);
+            return dateRange.length > 0 ? fCurrency(value) : 0;
           },
         },
       },

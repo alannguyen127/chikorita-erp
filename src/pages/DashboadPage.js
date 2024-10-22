@@ -8,6 +8,7 @@ import OrdersBarChart from "../components/chart/OrderBar";
 import MyDateRangePicker from "../components/DateRangePicker";
 import { useFrappeGetCall } from "frappe-react-sdk";
 import { date } from "yup";
+import Dashboard from "../components/Dashboard";
 
 // Helper function to create day list from range:
 
@@ -39,6 +40,8 @@ function DashboadPage() {
   return (
     <Stack>
       <MyDateRangePicker onChange={handleChangeDateRange} />
+      <Dashboard />
+
       <Grid container spacing={2}>
         <Grid size={6}>
           <LineGraph />
