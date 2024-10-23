@@ -2,12 +2,10 @@ import React, { useState } from "react";
 import LineGraph from "../components/chart/Line";
 import Grid from "@mui/material/Grid2";
 import GenderPieChart from "../components/chart/Pie";
-import { Box, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import RevenueBarChart from "../components/chart/Bar";
-import OrdersBarChart from "../components/chart/OrderBar";
 import MyDateRangePicker from "../components/DateRangePicker";
-import { useFrappeGetCall } from "frappe-react-sdk";
-import { date } from "yup";
+
 import Dashboard from "../components/Dashboard";
 
 // Helper function to create day list from range:
@@ -43,9 +41,6 @@ function DashboadPage() {
       <Dashboard startDate={startDate} endDate={endDate} />
 
       <Grid container spacing={2}>
-        {/* <Grid size={6}>
-          <LineGraph />
-        </Grid> */}
         <Grid size={12}>
           <RevenueBarChart
             dateRange={dateRange}
@@ -55,9 +50,6 @@ function DashboadPage() {
         </Grid>
         <Grid size={6}>
           <GenderPieChart />
-        </Grid>
-        <Grid size={6}>
-          <OrdersBarChart />
         </Grid>
       </Grid>
     </Stack>

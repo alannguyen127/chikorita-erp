@@ -222,7 +222,7 @@ function Table({ columns, data, onRowClick, searchColumns }) {
                         {row.cells.map((cell) => {
                           const isPaymentStatusColumn =
                             cell.column.Header === "Payment Status";
-                          const paymentStatusBackground =
+                          const paymentStatusColor =
                             cell.value === "Paid"
                               ? "text-green-500"
                               : cell.value === "Not yet"
@@ -230,7 +230,14 @@ function Table({ columns, data, onRowClick, searchColumns }) {
                               : cell.value === "COD"
                               ? "text-yellow-300"
                               : "text-black";
-
+                          const isStatusColumn =
+                            cell.column.Header === "Status";
+                          const statusColor =
+                            cell.value === "Active"
+                              ? "text-green-500"
+                              : cell.value === "Inactive"
+                              ? "text-red-500"
+                              : "text-black";
                           const isTotalAmountColumn =
                             cell.column.Header === "Total Amount";
 
@@ -246,10 +253,8 @@ function Table({ columns, data, onRowClick, searchColumns }) {
                             <td
                               {...cell.getCellProps()}
                               className={`px-6 py-4 whitespace-nowrap ${
-                                isPaymentStatusColumn
-                                  ? paymentStatusBackground
-                                  : ""
-                              }`}
+                                isPaymentStatusColumn ? paymentStatusColor : ""
+                              } ${isStatusColumn ? statusColor : ""}`}
                             >
                               {formattedValue}
                             </td>

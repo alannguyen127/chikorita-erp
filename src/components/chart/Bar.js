@@ -34,8 +34,8 @@ const RevenueBarChart = ({ dateRange, startDate, endDate }) => {
     }
   );
 
-  // console.log("sale data", salesData);
   const salesData = data?.message.sales_data || [];
+  // console.log("sale data", salesData);
 
   const totalSalesPerDay = dateRange.map((date) => {
     const salesOnDate = salesData.find((sale) => sale.order_date === date);

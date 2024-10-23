@@ -10,6 +10,8 @@ import {
   Legend,
 } from "chart.js";
 import { Box } from "@mui/material";
+import { useFrappeGetCall } from "frappe-react-sdk";
+import LoadingScreen from "../LoadingScreen";
 
 ChartJS.register(
   CategoryScale,
@@ -20,9 +22,9 @@ ChartJS.register(
   Legend
 );
 
-const OrdersBarChart = () => {
-  const data = {
-    labels: ["01/10", "02/10", "03/10", "04/10", "05/10", "06/10", "07/10"],
+const OrdersBarChart = ({ dateRange, startDate, endDate }) => {
+  const orderData = {
+    labels: dateRange.length > 0 ? dateRange : [],
     datasets: [
       {
         label: "Khách hàng cũ",
@@ -76,7 +78,7 @@ const OrdersBarChart = () => {
         marginTop: "20px",
       }}
     >
-      <Bar data={data} options={options} />
+      <Bar data={orderData} options={options} />
     </Box>
   );
 };

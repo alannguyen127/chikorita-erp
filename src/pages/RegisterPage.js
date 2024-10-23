@@ -18,22 +18,24 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { LoadingButton } from "@mui/lab";
 import { useAuth } from "../context/AuthContext";
+import { useFrappePostCall } from "frappe-react-sdk";
+import { Button } from "../utils/Button";
 
 const RegisterSchema = Yup.object().shape({
-  name: Yup.string().required("Name is required"),
+  first_name: Yup.string().required("Name is required"),
   email: Yup.string().email("Invalid email").required("Email is required"),
   password: Yup.string().required("Password is required"),
-  passwordConfirmation: Yup.string()
+  confirm_password: Yup.string()
     .required("Please confirm your password")
     .oneOf([Yup.ref("password")], "Passwords must match"),
   role: Yup.string().required("Role is required"),
 });
 
 const defaultValues = {
-  name: "",
+  first_name: "",
   email: "",
   password: "",
-  passwordConfirmation: "",
+  confirm_password: "",
   role: "",
 };
 
@@ -58,15 +60,31 @@ function RegisterPage() {
 
   const navigate = useNavigate();
 
+  const { call, isSubmitting: isCreating } = useFrappePostCall(
+    "emfresh_erp.em_fresh_erp.api.user.user.create_user_account"
+  );
+
   const onSubmit = async (data) => {
-    const { name, email, password } = data;
+    const { first_name, email, password, confirm_password, role } = data;
+
     try {
-      await auth.register({ name, email, password }, () => {
-        navigate("/", { replace: true });
+      const response = await call({
+        first_name,
+        email,
+        password,
+        confirm_password,
+        role,
       });
+
+      if (response.message.status === "success") {
+        alert(response.message.message);
+        navigate("/");
+      } else {
+        alert(response.message.message);
+      }
     } catch (error) {
-      reset();
-      setError("responseError", error);
+      console.error("Error creating user account:", error);
+      alert("An error occurred while creating the user account");
     }
   };
 
@@ -83,7 +101,7 @@ function RegisterPage() {
               Homepage
             </Link>
           </Alert>
-          <FTextField name="name" label="Full name" />
+          <FTextField name="first_name" label="First Name" />
           <FTextField name="email" label="Email address" />
           <FTextField
             name="password"
@@ -104,7 +122,7 @@ function RegisterPage() {
           />
 
           <FTextField
-            name="passwordConfirmation"
+            name="confirm_password"
             label="Password Confirmation"
             type={showPasswordConfirmation ? "text" : "password"}
             InputProps={{
@@ -126,18 +144,18 @@ function RegisterPage() {
               ),
             }}
           />
-          <FSelect name="role" label="Role">
-            <MenuItem value="staff">Staff</MenuItem>
-            <MenuItem value="staff">Manager</MenuItem>
+          <FSelect name="role" label="Role" defaultValues="">
+            <MenuItem value="Staff">Staff</MenuItem>
+            <MenuItem value="Manager">Manager</MenuItem>
           </FSelect>
           <LoadingButton
-            fullWidth
-            size="large"
             type="submit"
             variant="contained"
-            loading={isSubmitting}
+            color="primary"
+            fullWidth
+            disabled={isCreating}
           >
-            Create
+            {isCreating ? "Creating..." : "Create"}
           </LoadingButton>
         </Stack>
       </FormProvider>
